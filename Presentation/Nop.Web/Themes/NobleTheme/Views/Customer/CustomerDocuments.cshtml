@@ -1,0 +1,16 @@
+﻿@{
+    Layout = "_ColumnsTwo";
+}
+@section left
+{
+    @await Component.InvokeAsync("CustomerNavigation", new { selectedTabId = CustomerNavigationEnum.Documents })
+}
+<div class="page account-page avatar-page">
+    <div class="page-title panel-heading main-title">
+        <h1>@T("Account.MyAccount") - @T("Account.MyDocuments")</h1>
+    </div>
+    <div class="page-body panel-body from-panel">
+        @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.AccountDocuments })
+
+    </div>
+</div>

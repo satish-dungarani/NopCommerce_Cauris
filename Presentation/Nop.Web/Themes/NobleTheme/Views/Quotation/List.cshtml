@@ -1,0 +1,407 @@
+﻿@inject IWorkContext workContext
+@inject LocalizationSettings localizationSettings
+@using System.Globalization;
+@using Nop.Core.Domain.Media
+@using Nop.Core.Domain.Localization
+@inject MediaSettings _mediaSettings
+@model QuotationSearchModel
+@{
+
+    Layout = "_ColumnsTwo";
+    //page title
+    ViewBag.PageTitle = Model.Received ? T("Quotations.List.Received").Text : T("Quotations.List.Sended").Text;
+    var jQueryUI = "1.10.3";
+    Html.AppendScriptParts($"~/lib/jquery-ui/jquery-ui-{jQueryUI}/jquery-ui-{jQueryUI}.custom.min.js");
+    Html.AppendScriptParts("~/lib/jquery/jquery-3.4.1.min.js");
+
+    Html.AppendCssFileParts($"~/Themes/NobleTheme/Content/css/noble-style.css");
+
+}
+@section left
+    {
+    @await Component.InvokeAsync("CustomerNavigation", new { selectedTabId = Model.Received ? CustomerNavigationEnum.ReceivedQuotes : CustomerNavigationEnum.SendedQuotes })
+}
+<link href="https://unpkg.com/bootstrap-table@1.19.1/dist/themes/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+<link href="~/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+<link href="https://unpkg.com/jquery-resizable-columns@0.2.3/dist/jquery.resizableColumns.css" rel="stylesheet">
+<script src="https://unpkg.com/jquery-resizable-columns@0.2.3/dist/jquery.resizableColumns.min.js"></script>
+<script src="https://unpkg.com/tableexport.jquery.plugin/tableExport.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.19.1/dist/bootstrap-table.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.19.1/dist/themes/bootstrap-table/bootstrap-table.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.19.1/dist/extensions/export/bootstrap-table-export.min.js"></script>
+
+<script src="https://unpkg.com/bootstrap-table@1.19.1/dist/extensions/resizable/bootstrap-table-resizable.min.js"></script>
+<style>
+    .panel-heading .accordion-toggle:after {
+        /* symbol for "opening" panels */
+        font-family: 'Glyphicons Halflings'; /* essential for enabling glyphicon */
+        content: "\e114"; /* adjust as needed, taken from bootstrap.css */
+        float: right; /* adjust as needed */
+        color: grey; /* adjust as needed */
+    }
+
+    .panel-heading .accordion-toggle.collapsed:after {
+        /* symbol for "collapsed" panels */
+        content: "\e080"; /* adjust as needed, taken from bootstrap.css */
+    }
+
+
+    span.grid-report-item {
+        padding: .2em .6em .3em;
+        border-radius: .25em;
+        color: #2e2e2e;
+    }
+
+        span.grid-report-item.yellow {
+            background-color: #f39c12;
+            color: #fff;
+        }
+
+        span.grid-report-item.blue {
+            background-color: #00c0ef;
+            color: #fff;
+        }
+
+        span.grid-report-item.green {
+            background-color: #00a65a;
+            color: #fff;
+        }
+
+        span.grid-report-item.red {
+            background-color: #dd4b39;
+            color: #fff;
+        }
+
+        span.grid-report-item.grey {
+            background-color: #808080;
+            color: #fff;
+        }
+
+    .btn.btn-default {
+        background-color: #464744;
+        border: none;
+        color: #fff;
+        border-radius: 0px;
+        font-size: 14px;
+        font-weight: 700;
+        transition: all 0.3s ease-in-out 0s;
+        -webkit-transition: all 0.3s ease-in-out 0s;
+        -moz-transition: all 0.3s ease-in-out 0s;
+        -o-transition: all 0.3s ease-in-out 0s;
+    }
+
+    .btn.btn-default:hover, .btn.btn-default:focus {
+            background-color: #65c178;
+     }
+    .might-overflow {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+
+    .might-overflow:hover {
+            text-overflow: clip;
+            white-space: normal;
+            word-break: break-all;
+     }
+</style>
+
+<div class="content-header clearfix">
+    <h1 class="pull-left">
+        @if (Model.Received)
+            {
+        @T("Quotation.Received")
+            }
+            else
+            {
+        @T("Quotation.Sended")
+            }
+    </h1>
+</div>
+
+<div class="k-justify-content-around">
+
+            <div class="panel panel-default panel-search">
+
+                <div class="panel-group" id="accordion">
+                    <div class="panel-heading">
+
+                        <h4 class="panel-title">
+
+                            <span class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+                                <i class="fa fa-search" aria-hidden="true"></i>  Search
+                            </span>
+                        </h4>
+                    </div>
+
+                    <div id="collapseOne" class="panel-collapse collapse in">
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="col-md-4">
+                                        <label>
+                                            @if (Model.Received)
+                                        {<text>Seller Name</text>}
+                                    else
+                                    {<text>Buyer Name</text>}
+                                        </label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+                                    </div>
+                                </div>
+                                <br />
+                                <br />
+                                <div class="form-group">
+                                    <div class="col-md-4">
+                                        <label>
+                                            @if (Model.Received)
+                                        {<text>Seller Country</text>}
+                                    else
+                                    {<text>Buyer Country</text>}
+                                        </label>
+                                    </div>
+                                    <div class="col-md-8">
+
+                                        <nop-select asp-for="Country" asp-items="Model.AvailableCountries" />
+
+                                    </div>
+                                </div>
+                                <br />
+                                <br />
+                                <div class="form-group">
+                                    <div class="col-md-4">
+                                        <label>Status</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <nop-select asp-for="Status" asp-items="Model.AvailableQuotationStatus" />
+                                    </div>
+                                </div>
+                                <br />
+                                <br />
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="col-md-5">
+                                        <label>Date</label>
+                                    </div>
+                                    <div class="col-md-7">
+                                        @Html.TextBoxFor(m => m.LeadDateSearch, new { @class = "form-control" })
+                                    </div>
+                                </div>
+                                <br />
+                                <br />
+                                <div class="form-group">
+                                    <div class="col-md-5">
+                                        <label>Product</label>
+                                    </div>
+                                    <div class="col-md-7">
+                                        @Html.TextBoxFor(m => m.Product, new { @class = "form-control" })
+                                    </div>
+                                </div>
+                                <br />
+                                <br />
+
+                                <div class="form-group">
+                                    <div class="col-md-5">
+                                        <label>Quotation N°</label>
+                                    </div>
+                                    <div class="col-md-7">
+                                        @Html.TextBoxFor(m => m.Id, new { @class = "form-control" })
+                                    </div>
+                                </div>
+
+                                <br />
+                                <br />
+
+                            </div>
+
+                            <div class="col-md-7 col-md-offset-5">
+                                <button class="btn btn-primary" name="Search" id="btnSearch" value="Search" style="background-color: #3c8dbc; border-color: #367fa9; margin-top: 25px; min-width: 150px; padding: 7px 10px; font-size: 18px;"> Search <i class="fa fa-search"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="panel panel-default panel-search">
+                <table id="table"
+                       data-show-export="true"
+                       data-id-field="QuotationId"
+                       data-page-list="[10, 25, 50, 100]"
+                       data-show-footer="false"
+                       data-minimum-count-columns="10"
+                       data-show-pagination-switch="false"
+                       data-pagination="true"
+                       data-search="false"
+                       data-resizable="true"
+                       data-delay="true"
+                       data-show-refresh="true">
+                </table>
+
+            </div>
+
+
+</div>
+    <script type="text/javascript">
+    var $table = $('#table');
+    $(document).ready(function () {
+        $('#LeadDateSearch').datepicker({
+            "setDate": new Date(),
+            "autoclose": true
+        });
+
+        $('#btnSearch').click(function () {
+            filterTable();
+        });
+
+
+        initTable()
+    });
+
+
+    function initTable() {
+        var urlData = @Model.Received.ToString().ToLowerInvariant()? "/Quotation/ListReceived" : "/Quotation/ListSended"
+        var columnNameValue = @Model.Received.ToString().ToLowerInvariant()? "Seller Name" : "Buyer Name"
+        var fieldNameValue = @Model.Received.ToString().ToLowerInvariant()? "CustomerFullName" : "VendorName"
+        $table.bootstrapTable('destroy').bootstrapTable({
+            exportTypes: ['json', 'xml', 'csv', 'txt', 'excel'],
+            url: urlData,
+            method: 'get',
+
+            pageNumber: 1,
+            pagination: true,
+
+            columns: [
+                {
+                    field: 'QuotationId',
+                    title: 'NUM',
+                    sortable: true
+
+                },
+                
+                {
+                    field: 'ProductName',
+                    title: 'Product',
+                    sortable: true,
+
+                },
+                {
+                    field: fieldNameValue,
+                    title: 'Name',
+                    sortable: true,
+
+                },
+                {
+                    field: 'Country',
+                    title: 'Country',
+                    sortable: true,
+                    formatter: 'columnmightoverflow'
+                },
+                {
+                    field: 'Quantity',
+                    title: 'Quantity',
+                    sortable: true
+                },
+                {
+                    field: 'Price',
+                    title: 'Price',
+                    sortable: true
+                },
+                {
+                    field: 'LeadTime',
+                    title: 'LeadTime',
+                    sortable: true,
+                    formatter: 'formatDate'
+                },
+                {
+                    field: 'Status',
+                    title: 'Status',
+                    sortable: true,
+                    formatter: 'statusFormatter',
+                    width: '200'
+                },
+                {
+                   formatter: 'viewFormatter',
+                },
+
+            ]
+        });
+
+    };
+
+    function columnmightoverflow(value, row) {
+        return '<span class="might-overflow">' + value + '</span>'
+    }
+
+ 
+    function viewFormatter(value, row) {
+
+        return '<a class="btn btn-default"  href = Edit/' + row.QuotationId + '><i class="fa fa-eye"></i>View</a>'
+    }
+
+    function statusFormatter(value, row) {
+        if (row.StatusId ===10) {
+
+            return '<span class="grid-report-item yellow" >' + value + '</span>'
+        }
+        if (row.StatusId === 20) {
+
+            return '<span class="grid-report-item grey" >' + value + '</span>'
+        }
+
+        if (row.StatusId === 30) {
+
+            return '<span class="grid-report-item blue" >' + value + '</span>'
+        }
+        if (row.StatusId === 40) {
+
+            return '<span class="grid-report-item green" >' + value + '</span>'
+        }
+        else {
+            return '<span class="grid-report-item red" >' + value + '</span>'
+        }
+    }
+
+    function filterTable() {
+
+              var urlData = @Model.Received.ToString().ToLowerInvariant()? "@Html.Raw(Url.Action("ListReceived", "Quotation"))" : "@Html.Raw(Url.Action("ListSended", "Quotation"))"
+
+            var postData = {
+                Name: $('#@Html.IdFor(m=>m.Name)').val(),
+                LeadDateSearch: $('#@Html.IdFor(m=>m.LeadDateSearch)').val(),
+                Country: $('#@Html.IdFor(m=>m.Country)').val(),
+                Product: $('#@Html.IdFor(m=>m.Product)').val(),
+                Status: $('#@Html.IdFor(m=>m.Status)').val(),
+                Id: $('#@Html.IdFor(m=>m.Id)').val(),
+        }
+
+
+        $.ajax({
+            cache: false,
+            type: "POST",
+            url: urlData,
+            data: postData,
+            dataType: 'json',
+            success: function (response) {
+                $table.bootstrapTable({ data: response.Data });
+                $table.bootstrapTable('load', response.Data);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+
+            }
+});
+
+
+
+    };
+
+    function formatDate(value,row) {
+        var date = new Date(value);
+
+        return '<span>' + date.toLocaleDateString('fr-FR') + '</span>'
+    }
+
+    </script>

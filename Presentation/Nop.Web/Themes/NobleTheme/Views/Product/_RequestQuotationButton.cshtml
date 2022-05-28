@@ -1,0 +1,231 @@
+﻿@model QuotationModel
+
+@{
+    <div class="compare-products">
+
+        <input type="button" value="@T("Products.Quotation.Request")" class="btn btn-default add-to-wishlist-button" data-toggle="modal" data-target="#QuotationModal" />
+
+    </div>
+
+}
+<style>
+    .field-panel-title {
+        font-size: 16px;
+        color: #333;
+        font-weight: 700;
+        
+        text-align:center;
+    }
+    .textArea {
+        width: 300px;
+        height: 70px;
+    }
+</style>
+<div class="modal fade" id="QuotationModal" tabindex="-1" role="dialog" aria-labelledby="QutationModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+           
+                <div class="modal-header">
+                    <span class="field-panel-title">@T("Quotation.Request.New")</span>
+                    
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="page quotation-add-page">
+
+                        <div class="page-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <div class="col-md-3">
+                                            <label>Procuct Name</label>
+                                        </div>
+                                        <div class="col-md-9">
+                                            @Model.ProductName
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <br/>
+                            @if (!string.IsNullOrEmpty(Model.Result))
+                            {
+                                <div class="quotation-result-page">
+                                    <div class="result">
+                                        @Model.Result
+                                    </div>
+                                </div>
+                            }
+
+                            @if (!Model.AlreadyExist)
+                            {
+                                <div asp-validation-summary="ModelOnly" class="message-error"></div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <div class="col-md-3">
+                                                <label for="Quantity">@T("Quotation.Request.Quantity")</label>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <input asp-for="Quantity" id="product_enteredQuantity" type="number" min="1" />
+                                                <nop-required />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br />
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <div class="col-md-3">
+                                                <label for="LeadTime">@T("LeadTime")</label>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <input asp-for="LeadTime" class="delivery-dates" id="request_leadtime" />
+                                                <nop-required />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br />
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <div class="col-md-3">
+                                                <label asp-for="CountryId" asp-postfix=":">@T("Quotation.Request.Country")</label>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <select asp-for="CountryId" asp-items="Model.AvailableCountries" id="request_country"></select>
+                                                <nop-required />
+                                                <span asp-validation-for="CountryId"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br />
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <div class="col-md-3">
+                                                <label asp-for="Specification" asp-postfix=":"></label>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <textarea asp-for="Specification" class="textArea" id="request_desc"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="fieldset">
+                                    <div class="form-fields">
+                                        <div class="inputs">
+                                            <input asp-for="ProductId" type="hidden" />
+                                            <input asp-for="VendorId" type="hidden" />
+                                            <input asp-for="CustomerVendorId" type="hidden" />
+
+                                        </div>
+                                        <div class="inputs">
+                                            <label for="UnityPrice">@T("Quotation.Request.UnitPrice")</label>
+                                            <span asp-for="UnityPrice" class="unit-price">: @Math.Round(Model.UnityPrice, 2)</span>
+                                        </div>
+                                        <div class="inputs">
+                                            <label for="PriceHT italic">@T("Quotation.Request.PriceHT")</label>
+                                            <span asp-for="Price" id="totalPriceHT" class="price">: @Math.Round(Model.UnityPrice, 2)</span>
+                                        </div>
+                                        @{ string fees = Model.Fees.Any() ? "*" : "";}
+                                        <div class="inputs">
+                                            <label for="PriceTTC">@T("Quotation.Request.PriceTTC") @fees</label>
+                                            <span asp-for="Price" id="totalPriceTTC" class="price">: @Math.Round(Model.Price, 2)</span>
+                                        </div>
+                                        <div class="fees-list inputs">
+                                            <label>@fees </label>
+                                            <span>
+                                                : @String.Join(", ", Model.Fees.Select(f => f.Label + " : " + f.Percent + "%"))
+                                            </span>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="buttons">
+
+                                    <span id="resultrequest"></span>
+                                </div>
+
+                            }
+                        </div>
+                            </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="request-quotation-button" disabled="@Model.AlreadyExist">Send Request</button>
+                </div>
+            
+        </div>
+    </div>
+</div>
+<script asp-location="Footer">
+    $(document).ready(function () {
+
+        $('.modal').on('change', '#product_enteredQuantity', function () {
+
+            QuantityChanged(this.value);
+        });
+
+
+         function QuantityChanged(quantity) {
+        var data = {productId: @Model.ProductId,quantity: quantity};
+        $.ajax({
+            url: "/quotation/CalculatePriceForQuotation",
+            data: data,
+            success: function (response) {
+                $('#totalPriceHT').html(" : " + response.TotalPriceHT);
+                $('#totalPriceTTC').html(" : " + response.TotalPriceTTC);
+            }
+        });
+        }
+
+        $('.modal').on('click', '#request-quotation-button', function () {
+            var productId = @Model.ProductId;
+            var qte = $('#product_enteredQuantity').val();
+            var date = $('#request_leadtime').val();
+            var text = $('#request_desc').val();
+            var country = $('#request_country').val();
+            var price = $('#totalPriceHT').html();
+          
+            var vendor = @Model.VendorId;
+           
+           
+            var postData = { productId: productId, quantity: qte, leadDate: date, countryId: country, msgDetails: text, unityPrice: price, vendorId:vendor };
+            $.ajax({
+                url: "/quotation/CreateRequestQuotation",
+                data: postData,
+                success: function (response) {
+                    success_process(response);
+                    $('#QuotationModal').modal('hide');
+                }
+            });
+        });
+        function success_process(response) {
+
+            if (response.message) {
+                //display notification
+                if (response.success === true) {
+                   
+                    displayBarNotification(response.message, 'success', 3500);
+
+                }
+                else {
+                    //no timeout for errors
+                    displayBarNotification(response.message, 'error', 0);
+                }
+
+                return false;
+            }
+        }
+    });
+
+</script>
+
+

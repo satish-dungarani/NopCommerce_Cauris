@@ -1,0 +1,90 @@
+﻿@using Nop.Web.Models.Transactions
+@model TransactionSearchModel
+@{
+    Layout = "_ColumnsTwo";
+    //page title
+    ViewBag.PageTitle = Model.IsReceived ? T("Transaction.List.Received").Text : T("Transaction.List.Sent").Text;
+
+    Html.AppendCssFileParts(ResourceLocation.Head, "~/lib/datatables/css/jquery.dataTables.css");
+    //Html.AppendScriptParts(ResourceLocation.Footer, "lib/jquery/jquery-3.4.1.min.js");
+
+    Html.AppendScriptParts(ResourceLocation.Footer, "~/lib/jquery-ui/jquery-ui-1.12.1.custom/external/jquery/jquery.js");
+    Html.AppendScriptParts(ResourceLocation.Footer, "~/lib/datatables/js/jquery.dataTables.js");
+    //page class
+    Html.AppendPageCssClassParts("html-account-page");
+    Html.AppendPageCssClassParts("html-customer-info-page");
+}
+
+@section left
+{
+    @await Component.InvokeAsync("CustomerNavigation", new { selectedTabId = Model.IsReceived ? CustomerNavigationEnum.ReceivedTransactions : CustomerNavigationEnum.SentTransactions })
+}
+
+<div class="page account-page customer-info-page">
+    <div class="page-title">
+        <h1>
+            @if (Model.IsReceived)
+            {
+                @T("Transactions.Received")
+            }
+            else
+            {
+                @T("Transactions.Sent")
+            }
+        </h1>
+    </div>
+    <div class="page-body">
+        <div class="panel-group">
+            <table id="table_id" class="display">
+                <thead>
+                    <tr>
+                        <th>Index</th>
+                        <th>Product</th>
+                        <th>Vendor</th>
+                        <th>Customer</th>
+                        <th></th>
+                    </tr>
+                </thead>
+            </table>
+
+        </div>
+    </div>
+</div>
+<script asp-location="Footer">
+    jQuery.noConflict();
+    $(document).ready(function () {
+        $('#table_id').DataTable({
+            "proccessing": true,
+            "serverSide": true,
+            "ajax": {
+                url: "@Url.Action("DataSource", "Transaction")" + '?isReceived=' + true,
+                type: 'POST',
+                datatype: "json"
+            },
+            "language": {
+                "search": "",
+                "searchPlaceholder": "Search..."
+            },
+            "columns": [
+                { "data": "Id" },
+                { "data": "ProductName" },
+                { "data": "VendorName" },
+                { "data": "CustomerName" },
+                { "data": "", "defaultContent": "<button onclick='edititem();'>Edit</button>" }
+            ],
+            //"defaultContent": "<button>Click!</button>"
+
+            //"mRender": function (data, type, full) {
+            //    return '<a class="btn btn-info btn-sm" href=#/' + full[0] + '>' + 'Edit' + '</a>';
+            //}
+        });
+    });
+
+    function edititem() {
+        alert("ddddddddd")
+        window.location.reload("http://localhost:15536/customer/addressedit/1");
+    }
+
+
+
+</script>

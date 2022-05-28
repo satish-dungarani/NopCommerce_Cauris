@@ -1,0 +1,395 @@
+﻿@inject IWorkContext workContext
+@inject LocalizationSettings localizationSettings
+@inject Nop.Services.Localization.ILanguageService languageService
+@using System.Globalization
+@using Nop.Core.Domain
+@using Nop.Core.Domain.Localization
+@using Nop.Services.Common
+@using Nop.Services.Customers
+@using Nop.Services.Helpers
+@using Nop.Services.Security
+@using Nop.Web.Framework.UI
+@using Nop.Web.Models.Transactions
+@model TransactionSearchModel
+<style type="text/css">
+.singleLine
+{
+    text-wrap:none;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+table{
+    width:1150px !important;
+}
+#table_transaction{
+    width:1150px !important;
+}
+</style>
+@{
+    Layout = "_ColumnsTwo";
+    //page title
+    ViewBag.PageTitle = Model.IsReceived ? T("Transaction.List.Received").Text : T("Transaction.List.Sent").Text;
+
+    //Kendo UI
+    var kendoVersion = "2020.1.406";
+    var jQueryUI = "1.10.3";
+    var supportRtl = workContext.WorkingLanguage.Rtl && !localizationSettings.IgnoreRtlPropertyForAdminArea;
+
+    //CSS resources
+    if (supportRtl)
+    {
+        Html.AppendCssFileParts("~/css/admin/styles.rtl.css");
+        Html.AppendCssFileParts("~/lib/adminLTE/css/AdminLTE.rtl.css");
+        Html.AppendCssFileParts("~/lib/bootstrap/css/bootstrap.rtl.css");
+    }
+    else
+    {
+        Html.AppendCssFileParts("~/css/admin/styles.css");
+        Html.AppendCssFileParts("~/lib/adminLTE/css/AdminLTE.min.css");
+        Html.AppendCssFileParts("~/lib/bootstrap/css/bootstrap.min.css");
+    }
+    
+    Html.AppendCssFileParts($"~/lib/datatables/datatables.min.css");
+    Html.AppendCssFileParts($"~/lib/datatables/css/dataTables.bootstrap.css");
+    Html.AppendCssFileParts($"~/lib/kendo/{kendoVersion}/styles/web/kendo.common.min.css");
+    Html.AppendScriptParts($"~/lib/datatables/datatables.min.js");
+    Html.AppendScriptParts($"~/lib/datatables/js/dataTables.bootstrap.min.js");
+    Html.AppendScriptParts($"~/lib/datatables/js/jquery.dataTables.min.js");
+    Html.AppendScriptParts("~/js/admin.common.js");
+    Html.AppendScriptParts($"~/lib/jquery-ui/jquery-ui-{jQueryUI}/jquery-ui-{jQueryUI}.custom.min.js");
+    Html.AppendScriptParts("~/lib/jquery/jquery-3.4.1.min.js");
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js" integrity="sha512-bPs7Ae6pVvhOSiIcyUClR7/q2OAsRiovw4vAkX+zJbw3ShAeeqezq50RIIcIURq7Oa20rW2n2q+fyXBNcU9lrw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+}
+@section left
+{
+    @await Component.InvokeAsync("CustomerNavigation", new { selectedTabId = Model.IsReceived ? CustomerNavigationEnum.ReceivedTransactions : CustomerNavigationEnum.SentTransactions })
+}
+<div class="content" style="width:1220px !important;">
+    <div class="page account-page customer-info-page">
+        <div class="content-header clearfix">
+            <h1 class="pull-left">
+                @if (Model.IsReceived)
+                {
+                    @T("Transactions.Received")
+                }
+                else
+                {
+                    @T("Transactions.Sent")
+                }
+            </h1>
+            @*<div class="pull-right">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-success">
+                        <i class="fa fa-download"></i>
+                        @T("Admin.Common.Export")
+                    </button>
+                    <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                        <span class="caret"></span>
+                        <span class="sr-only">&nbsp;</span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li>
+                            <button asp-action="ExportXml" type="submit" name="exportpdf">
+                                <i class="fa fa-file-code-o"></i>
+                                Export To Pdf
+                            </button>
+                        </li>
+                        <li>
+                            <button asp-action="ExportExcel" type="submit" name="exportexcel-all">
+                                <i class="fa fa-file-excel-o"></i>
+                                Export To Excel
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>*@
+        </div>
+        <div class="panel-group">
+            <div class="panel panel-default panel-search">
+                <div class="panel-body">
+                    <div class="row search-row opened">
+                        <div class="search-text">@T("Admin.Common.Search")</div>
+                        <div class="icon-search"><i class="fa fa-search" aria-hidden="true"></i></div>
+                        <div class="icon-collapse"><i class="fa fa-angle-down" aria-hidden="true"></i></div>
+                    </div>
+                    <div class="search-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="col-md-4">
+                                        <label>
+                                            @if (Model.IsReceived)
+                                            {<text>Buyer Name</text>}
+                                        else
+                                        {<text>Seller Name</text>}
+                                        </label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+                                    </div>
+                                </div>
+                                <br />
+                                <div class="form-group">
+                                    <div class="col-md-4">
+                                        <label>
+                                            @if (Model.IsReceived)
+                                            {<text>Buyer Country</text>}
+                                        else
+                                        {<text>Seller Country</text>}
+                                        </label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <nop-select asp-for="Country" asp-items="Model.AvailableCountries" />
+                                    </div>
+                                </div>
+                                <br />
+                                <div class="form-group">
+                                    <div class="col-md-4">
+                                        <label>Status</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <select asp-for="Status" class="form-control" asp-items="Model.AvailableTransactionStatus"></select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="col-md-4">
+                                        <label>Date</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        @Html.TextBoxFor(m => m.Date, new { @class = "form-control" })
+                                    </div>
+                                </div>
+                                <br />
+                                <div class="form-group">
+                                    <div class="col-md-4">
+                                        <label>Product</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        @Html.TextBoxFor(m => m.Product, new { @class = "form-control" })
+                                    </div>
+                                </div>
+                                <br />
+                                <div class="form-group">
+                                    <div class="col-md-4">
+                                        <label>Transaction Number</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        @Html.TextBoxFor(m => m.TransNumber, new { @class = "form-control" })
+                                    </div>
+                                </div>
+                                <br />
+                            </div>
+                            <div class="col-md-7 col-md-offset-5">
+                                <button class="btn btn-primary" onclick="fillGrid()" name="Search" value="Search" style="background-color: #3c8dbc; border-color: #367fa9; margin-top: 25px; min-width: 150px; padding: 7px 10px; font-size: 18px;"> Search <i class="fa fa-search"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <table id="table_transaction" class="table table-bordered table-hover table-striped dataTable no-footer transaction-table" style="width: 1140px !important;"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script asp-location="Footer">
+    jQuery.noConflict();
+    var isReceived = '@Model.IsReceived' == 'True' ? true : false;
+    $(document).ready(function () {
+        $('#Date').datepicker({
+            "setDate": new Date(),
+            "autoclose": true
+        });
+        fillGrid();
+    });
+    
+    function fillGrid() {
+      
+        if(isReceived){
+        var table =  $('#table_transaction').DataTable({
+            processing: !0,
+            serverSide: !0,
+            ajax: {
+                url: "@Url.Action("DataSource", "Transaction")" + '?isReceived=' + isReceived + '&name=' + $("#Name").val() + '&country=' + $("#Country").val() + '&date=' + $("#Date").val() + '&product=' + $("#Product").val() + '&status=' + $("#Status").val() + '&transnumber=' + $("#TransNumber").val(),
+                type: 'POST',
+                datatype: "json"
+            },
+            //scrollX: 1,
+            //scrollX: "100%",
+            info: !0,
+            paging: !0,
+            pagingType: "simple_numbers",
+            language: {
+                emptyTable: "No data available in table",
+                info: "_START_-_END_ of _TOTAL_ items",
+                infoEmpty: "No records",
+                infoFiltered: "(filtered from _MAX_ total entries)",
+                thousands: ",",
+                lengthMenu: "Show _MENU_ items",
+                loadingRecords: "Loading...",
+                processing: "<i class='fa fa-refresh fa-spin'><\/i>",
+                search: "Search:",
+                zeroRecords: "No matching records found",
+                paginate: {
+                    first: "<i class='k-icon k-i-seek-w'><\/i>",
+                    last: "<i class='k-icon k-i-seek-e'><\/i>",
+                    next: "<i class='k-icon k-i-arrow-e'><\/i>",
+                    previous: "<i class='k-icon k-i-arrow-w'><\/i>"
+                },
+                aria: {
+                    sortAscending: ": activate to sort column ascending",
+                    sortDescending: ": activate to sort column descending"
+                }
+            },
+            pageLength: 15,
+            lengthMenu: [7, 15, 20, 50, 100],
+            ordering: !0,
+            destroy:true,
+            buttons: ['excel', 'pdf'],
+            dom: "<'row'<'col-md-12't>><'row margin-t-5'<'col-lg-5 col-xs-12'<'float-lg-left'p>><'col-lg-3 col-xs-12'<'text-center'l>><'col-lg-4 col-xs-12'<'float-lg-right text-center'i>>>",
+            columns: [
+                //{ "title": "Id", "data": "Id", "visible": false, "className": "singleLine" },
+                { "title": "Transaction No.", "data": "Id", "className": "singleLine text-center"},
+                { "title": "Date", "data": "DispQuotationDate","className": "singleLine" },
+                //{ "title": "Seller Name", "data": "VendorName", "visible": '@Model.IsReceived' == 'True' ? false : true,"className": "singleLine" },
+                //{ "title": "Seller Country", "data": "VendorCountry", "visible": '@Model.IsReceived' == 'True' ? false : true,"className": "singleLine" },
+                { "title": "Buyer Name", "data": "CustomerName", /*"visible": '@Model.IsReceived' == 'True' ? true : false,*/"className": "singleLine" },
+                { "title": "Buyer Country", "data": "Country", /*"visible": '@Model.IsReceived' == 'True' ? true : false,*/"className": "singleLine" },
+                { "title": "Product", "data": "ProductName" },
+                {
+                    "title": "Status",
+                    "data": "TransactionStatus",
+                    "className": "singleLine",
+                    bSortable: false,
+                    "render": function (data, type, row) {
+                        if (row.TransactionStatusId == 10) {
+                            return '<small class="label label-warning">' + row.TransactionStatus + '</small>';
+                        } else if (row.TransactionStatusId == 20) {
+                            return '<small class="label label-default">' + row.TransactionStatus + '</small>';
+                        } else if (row.TransactionStatusId == 30) {
+                            return '<small class="label label-success">' + row.TransactionStatus + '</small>';
+                        } else if (row.TransactionStatusId == 40) {
+                            return '<small class="label bg-black">' + row.TransactionStatus + '</small>';
+                        } else if (row.TransactionStatusId == 50) {
+                            return '<small class="label label-primary">' + row.TransactionStatus + '</small>';
+                        } else if (row.TransactionStatusId == 60) {
+                            return '<small class="label label-warning">' + row.TransactionStatus + '</small>';
+                        } else if (row.TransactionStatusId == 70) {
+                            return '<small class="label bg-black">' + row.TransactionStatus + '</small>';
+                        } else {
+                            return '<small class="label bg-red">' + row.TransactionStatus + '</small>';
+                        }
+                    }
+                },
+                {
+                    "title": "Action",
+                    "className": "singleLine text-center",
+                    bSortable: false,
+                    render: function (data, type, row) {
+                        return '<a href="edit?id=' + row.Id + '" class="btn btn-default"> View <i class="fa fa-eye"></i></a>';
+                    }
+                }
+            ]
+        });
+        }
+        else{
+
+       
+        var table =  $('#table_transaction').DataTable({
+            processing: !0,
+            serverSide: !0,
+            ajax: {
+                url: "@Url.Action("DataSource", "Transaction")" + '?isReceived=' + isReceived + '&name=' + $("#Name").val() + '&country=' + $("#Country").val() + '&date=' + $("#Date").val() + '&product=' + $("#Product").val() + '&status=' + $("#Status").val() + '&transnumber=' + $("#TransNumber").val(),
+                type: 'POST',
+                datatype: "json"
+            },
+            //scrollX: 1,
+            //scrollX: "100%",
+            info: !0,
+            paging: !0,
+            pagingType: "simple_numbers",
+            language: {
+                emptyTable: "No data available in table",
+                info: "_START_-_END_ of _TOTAL_ items",
+                infoEmpty: "No records",
+                infoFiltered: "(filtered from _MAX_ total entries)",
+                thousands: ",",
+                lengthMenu: "Show _MENU_ items",
+                loadingRecords: "Loading...",
+                processing: "<i class='fa fa-refresh fa-spin'><\/i>",
+                search: "Search:",
+                zeroRecords: "No matching records found",
+                paginate: {
+                    first: "<i class='k-icon k-i-seek-w'><\/i>",
+                    last: "<i class='k-icon k-i-seek-e'><\/i>",
+                    next: "<i class='k-icon k-i-arrow-e'><\/i>",
+                    previous: "<i class='k-icon k-i-arrow-w'><\/i>"
+                },
+                aria: {
+                    sortAscending: ": activate to sort column ascending",
+                    sortDescending: ": activate to sort column descending"
+                }
+            },
+            pageLength: 15,
+            lengthMenu: [7, 15, 20, 50, 100],
+            ordering: !0,
+            destroy:true,
+            buttons: ['excel', 'pdf'],
+            dom: "<'row'<'col-md-12't>><'row margin-t-5'<'col-lg-5 col-xs-12'<'float-lg-left'p>><'col-lg-3 col-xs-12'<'text-center'l>><'col-lg-4 col-xs-12'<'float-lg-right text-center'i>>>",
+            columns: [
+                //{ "title": "Id", "data": "Id", "visible": false, "className": "singleLine" },
+                { "title": "Transaction No.", "data": "Id", "className": "singleLine text-center"},
+                { "title": "Date", "data": "DispQuotationDate","className": "singleLine" },
+                { "title": "Seller Name", "data": "VendorName", /*"visible": '@Model.IsReceived' == 'True' ? false : true,*/"className": "singleLine" },
+                { "title": "Seller Country", "data": "VendorCountry", /*"visible": '@Model.IsReceived' == 'True' ? false : true,*/"className": "singleLine" },
+                //{ "title": "Buyer Name", "data": "CustomerName", "visible": '@Model.IsReceived' == 'True' ? true : false,"className": "singleLine" },
+                //{ "title": "Buyer Country", "data": "Country", "visible": '@Model.IsReceived' == 'True' ? true : false,"className": "singleLine" },
+                { "title": "Product", "data": "ProductName" },
+                {
+                    "title": "Status",
+                    "data": "TransactionStatus",
+                    "className": "singleLine",
+                    bSortable: false,
+                    "render": function (data, type, row) {
+                        if (row.TransactionStatusId == 10) {
+                            return '<small class="label label-warning">' + row.TransactionStatus + '</small>';
+                        } else if (row.TransactionStatusId == 20) {
+                            return '<small class="label label-default">' + row.TransactionStatus + '</small>';
+                        } else if (row.TransactionStatusId == 30) {
+                            return '<small class="label label-success">' + row.TransactionStatus + '</small>';
+                        } else if (row.TransactionStatusId == 40) {
+                            return '<small class="label bg-black">' + row.TransactionStatus + '</small>';
+                        } else if (row.TransactionStatusId == 50) {
+                            return '<small class="label label-primary">' + row.TransactionStatus + '</small>';
+                        } else if (row.TransactionStatusId == 60) {
+                            return '<small class="label label-warning">' + row.TransactionStatus + '</small>';
+                        } else if (row.TransactionStatusId == 70) {
+                            return '<small class="label bg-black">' + row.TransactionStatus + '</small>';
+                        } else {
+                            return '<small class="label bg-red">' + row.TransactionStatus + '</small>';
+                        }
+                    }
+                },
+                {
+                    "title": "Action",
+                    "className": "singleLine text-center",
+                    bSortable: false,
+                    render: function (data, type, row) {
+                        return '<a href="edit?id=' + row.Id + '" class="btn btn-default"> View <i class="fa fa-eye"></i></a>';
+                    }
+                }
+            ]
+        });
+         }
+
+       //$(table.table().header()).addClass( 'singleLine' );
+    }
+</script>

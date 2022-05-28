@@ -1,0 +1,35 @@
+﻿@model List<NotificationModel>
+<li id="flyout-cart" class="flyout-cart">
+    <div class="mini-shopping-cart">
+        @if (Model.Count > 0)
+        {
+            <div class="items">
+                @for (var i = 0; i < Model.Count; i++)
+                {
+                    var item = Model[i];
+                    <div class="item">
+                        <div class="picture" style="cursor: pointer;">
+                            @*<a href="@Url.RouteUrl("NotificationRedirect", new { entityId = item.EntityId,entityName=item.EntityName })">@item.EntityName</a>*@
+                            <a href="/Transaction/NotificationRedirect?id=@item.Id&entityId=@item.EntityId&entityName=@item.EntityName">@item.EntityName</a>
+                        </div>
+                        <div class="product">
+                            <div class="name">
+                                <span>@item.CreatedByName</span>
+                            </div>
+
+                            <div class="quantity"> <span>  @item.CreatedForName</span></div>
+                            <div class="price"> <span>@item.CreatedDate</span></div>
+                        </div>
+                    </div>
+                }
+            </div>
+           <div class="buttons">
+                <input type="button" value="Read all Notification" class="btn btn-default cart-button" onclick="setLocation('@(Url.RouteUrl("CustomNotification"))')" />
+            </div>
+        }
+        else
+        {
+            <div class="empty-shopping-cart">You have no items in your Notification.</div>
+        }
+    </div>
+</li>

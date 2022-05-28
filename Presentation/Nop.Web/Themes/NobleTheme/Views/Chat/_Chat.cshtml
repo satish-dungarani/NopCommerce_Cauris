@@ -1,0 +1,83 @@
+﻿@model Nop.Web.Models.Chat.ConversationModel
+<script src="~/js/signalr/dist/browser/signalr.js"></script>
+<script src="~/lib/bootstrap/js/bootstrap.min.js"></script>
+<link href="~/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+<link href="~/lib/bootstrap/css/bootstrap.css" rel="stylesheet" />
+<link href="~/lib/fontAwesome/css/font-awesome.css" rel="stylesheet" />
+<link src="https://fonts.googleapis.com/css?family=Lato:100,100i,300,300i,400,400i,700,700i,900,900i" type="text/css" />
+<link href="~/css/Chat/chat.css" rel="stylesheet" />
+<script>
+    $(function () {
+        $('.fa-minus').click(function () {
+            if ($(this).closest('.chatbox').hasClass('chatbox-min')) {
+                $(this).closest('.chatbox').addClass('chatbox-min');
+            }
+            else {
+                $(this).closest('.chatbox').removeClass('chatbox-min');
+            }
+        });
+        $('.fa-close').click(function () {
+            //$(this).closest('.chatbox').hide();
+            $(this).closest('.chatbox-holder').remove();
+            ReorganizeDivConversation();
+            RemoveConversationFromCookies($(this).closest('.chatbox-holder').find('.hiddenPartnerId').val());
+        });
+        $('.chat-input').keypress(function (event) {
+            if (event.key === "Enter") {
+                $(this).parent().find('.sendButton').click();
+            }
+
+        });
+        $('.chat-input').focus(function (event) {
+            debugger;
+            if ($(this).parent().find('.unreadInputMessages').val() === "true") {
+                SetReadMessagesConversation($(this).parents('.chatbox-holder').attr('conversationId'));
+                $(this).parent().find('.unreadInputMessages').val('false');
+                $(this).parents('.chatbox-holder').find('.donot-disturb').addClass('hidden');
+            }
+            $(this).parents('.chatbox-holder').find('.chat-partner-name').removeClass('backgroundBlueLight');
+        });
+    });
+    function MinusClicked(source) {
+
+        $(source).closest('.chatbox').toggleClass('chatbox-min');
+        scrollChatToBottom($(source).parents('.chatbox-holder'));
+    }
+</script>
+<div class="chatbox-holder" conversationId="@Model.ConversationId" id="divConversation_@Model.ConversationId">
+    <div class="chatbox chatbox-min">
+        <div class="chatbox-top">
+            @*<div class="chatbox-avatar">
+                <a target="_blank" href=""><img src="" /></a>
+            </div>*@
+            <div class="chat-partner-name">
+                <span class="status donot-disturb @(Model.HasUnreadMessages ? "" : "hidden")"></span>
+                <a onclick="MinusClicked(this)">@Model.PartnerName</a>
+            </div>
+            <div class="chatbox-icons">
+                <a href="javascript:void(0);"><i class="fa fa-minus" onclick="MinusClicked(this)"></i></a>
+                <a href="javascript:void(0);"><i class="fa fa-close"></i></a>
+            </div>
+        </div>
+
+        <div class="chat-messages" id="chat-messages">
+
+        </div>
+
+        <div class="chat-input-holder">
+            @if (Model.HasUnreadMessages)
+            {
+                <input type="hidden" value="true" class="unreadInputMessages" />
+            }
+            else
+            {
+                <input type="hidden" value="false" class="unreadInputMessages" />
+            }
+            <input type="text" style="display:none" readonly="readonly" class="hiddenPartnerId" value="@Model.PartnerId" />
+            <input type="text" class="chat-input" placeholder="msg to send" />
+            <input type="button" value="Send" id="sendButton" onclick="SendMessage(this)" class="message-send sendButton" />
+        </div>
+
+
+    </div>
+</div>

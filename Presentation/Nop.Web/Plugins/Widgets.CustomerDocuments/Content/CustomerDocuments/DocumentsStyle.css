@@ -1,0 +1,33 @@
+﻿#trigger-upload {
+  color: white;
+  background-color: #00ABC7;
+  font-size: 14px;
+  padding: 7px 20px;
+  background-image: none;
+}
+
+#trigger-upload1 {
+  color: white;
+  background-color: #00ABC7;
+  font-size: 14px;
+  padding: 7px 20px;
+  background-image: none;
+}
+#fine-uploader-manual-trigger .qq-upload-button {
+  margin-right: 15px;
+}
+
+#fine-uploader-manual-trigger .buttons {
+  width: 36%;
+}
+#fine-uploader-manual-trigger .qq-uploader .qq-total-progress-bar-container {
+  width: 60%;
+}
+
+#fine-uploader-manual-trigger .qq-alert-dialog-selector {
+  position: absolute;
+  margin-top: 100px;
+  width: 100px;
+  margin-left: 400px;
+  align-content: center;
+}

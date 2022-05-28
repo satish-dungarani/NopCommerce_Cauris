@@ -1,0 +1,273 @@
+﻿@model QuotationModel
+
+@{
+    Layout = "_ColumnsTwo";
+    var info = string.Empty;
+}
+@section left
+{
+    @await Component.InvokeAsync("CustomerNavigation", new { selectedTabId = CustomerNavigationEnum.SendedQuotes });
+  
+}
+<link href="~/css/Quotation/RequestForQuote.css" rel="stylesheet" />
+
+
+<div class="k-justify-content-around">
+    <div class="panel">
+        <div class="panel-group">
+          
+
+                <label>Request Quotation for: @Model.ProductName</label>
+          
+        </div>
+            <div class="panel-group">
+                <div class="multisteps-form">
+                    <!--progress bar-->
+                    
+                    <div class="row">
+                        <div class="col-12 col-lg- %ml-auto mr-auto mb-8">
+                            <div class="multisteps-form__progress">
+
+                                @foreach (var status in Model.PreviousQuotationStatus)
+                                {
+                                    info = status.Text.Replace(" ", "-");
+                                    <button class="multisteps-form__progress-btn js-active" type="button" title=@info>@status.Text</button>
+                                    
+                                }
+                                <button class="multisteps-form__progress-btn js-active" type="button" title=@Model.StatusText>@Model.StatusText</button>
+                                @foreach (var status in Model.NextQuotationStatus)
+                                {
+                                    info = status.Text.Replace(" ", "-");
+                                    <button class="multisteps-form__progress-btn" type="button" title=@info>@status.Text</button>
+                                }
+
+                            </div>
+                        </div>
+                    </div>
+                    <!--form panels-->
+
+                </div>
+            </div>
+            <div class="page quotation-add-page">
+                <div class="page-body">
+                    <div class="panel-group">
+
+                        @if (!string.IsNullOrEmpty(Model.Result))
+                        {
+                            <div class="quotation-result-page">
+                                <div class="result">
+                                    @Model.Result
+                                </div>
+                            </div>
+                        }
+                        @if (!Model.AlreadyExist)
+                        {
+                    <form method="post" autocomplete="off">
+                        @*----  *@
+
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="col-md-5">
+                                        <label>Quantity</label>
+                                    </div>
+                                    <div class="col-md-7">
+                                        @Html.TextBoxFor(m => m.Quantity, new { @class = "form-control" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="col-md-5">
+                                        <label>LeadTime</label>
+                                    </div>
+                                    <div class="col-md-7">
+                                        <span>@Model.LeadTime</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                        @if (Model.Status == (int)QuotationStatus.CustomerSend && Model.IsVendor)
+                        {
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <div class="col-md-5">
+                                            <label>@T("Quotation.Request.NewLeadTime")</label>
+                                        </div>
+                                        <div class="col-md-7">
+                                            <input asp-for="NewLeadTime" value="@Model.LeadTime" class="delivery-dates" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        <br />
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="col-md-5">
+                                        <label>Country</label>
+                                    </div>
+                                    <div class="col-md-7">
+                                        <span>@Model.Country</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @if (!string.IsNullOrEmpty(Model.Specification))
+                        {
+                        <br />
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="col-md-5">
+                                        <label>Details</label>
+                                    </div>
+                                    <div class="col-md-7">
+                                        <span>@Model.Specification</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        }
+                        @*----  *@
+
+                        <div asp-validation-summary="ModelOnly" class="message-error"></div>
+                        <div class="fieldset">
+                            <div class="form-fields">
+                                <div class="inputs">
+                                    <input asp-for="ProductId" type="hidden" />
+                                    <input asp-for="VendorId" type="hidden" />
+                                    <input asp-for="CustomerVendorId" type="hidden" />
+
+                                </div>
+                                <div class="inputs" style="display:none">
+                                    <label asp-for="Quantity" asp-postfix=":">@T("Quotation.Request.Quantity")</label>
+                                    @if (Model.Status == (int)QuotationStatus.CustomerSend && Model.IsVendor)
+                                    {
+                                        @if (Model.AllowedQuantities.Count > 0)
+                                        {
+                                            <select asp-for="Quantity" asp-items="Model.AllowedQuantities" id="product_enteredQuantity_@Model.ProductId" class="qty-dropdown" aria-label=@T("Products.Qty.AriaLabel")></select>
+
+                                        }
+                                        else
+                                        {
+                                            <input asp-for="Quantity" id="product_enteredQuantity_@Model.ProductId" type="number" min="1" />
+
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <span>@Model.Quantity</span>
+                                    }
+                                </div>
+                                <div class="inputs" style="display:none">
+                                    <label asp-for="LeadTime" asp-postfix=":">@T("Quotation.Request.LeadTime")</label>
+
+                                    <span>@Model.LeadTime.ToShortDateString()</span>
+                                </div>
+                                @if (Model.Status == (int)QuotationStatus.CustomerSend && Model.IsVendor)
+                                {
+                                    <div class="inputs" style="display:none">
+                                        <label asp-for="NewLeadTime" asp-postfix=":">@T("Quotation.Request.NewLeadTime")</label>
+                                        <input asp-for="NewLeadTime" value="@Model.LeadTime" class="delivery-dates" />
+                                    </div>
+                                }
+                                <div class="inputs" style="display:none">
+                                    <label asp-for="CountryId" asp-postfix=":">@T("Quotation.Request.Country")</label>
+
+                                    <span style="margin-top:5%">@Model.Country</span>
+                                    <input type="hidden" asp-for="CountryId" />
+                                    <input type="hidden" asp-for="QuotationId" />
+                                </div>
+                                <div class="inputs" style="display:none">
+                                    <label asp-for="Specification" asp-postfix=":"></label>
+                                    <span>@Model.Specification</span>
+                                </div>
+
+                                <div class="inputs" style="display:none">
+                                    <label asp-for="UnityPrice" asp-postfix=":">@T("Quotation.Request.UnitPrice")</label>
+                                    <span asp-for="UnityPrice" class="unit-price"> @Math.Round(Model.UnityPrice, 2)</span>
+                                </div>
+
+                                <div class="inputs" style="display:none">
+                                    <label asp-for="UnityPrice" class="PriceHT italic" asp-postfix=":">@T("Quotation.Request.PriceHT")</label>
+                                    <span asp-for="Price" id="totalPriceHT" class="price"> @Math.Round(Model.UnityPrice, 2)</span>
+                                </div>
+                                @{ string fees = Model.Fees.Any() ? "*" : "";}
+                                <div class="inputs" style="display:none">
+                                    <label asp-for="Price" asp-postfix=":">@T("Quotation.Request.PriceTTC") @fees</label>
+                                    <span asp-for="Price" id="totalPriceTTC" class="price">@Math.Round(Model.Price, 2)</span>
+                                </div>
+                                @* Vendor can edit TTC price
+                @if (Model.IsVendor && Model.Status == (int)QuotationStatus.CustomerSend)
+                {
+                    <div class="inputs">
+                        <label asp-for="Price" asp-postfix=":">@T("Quote.Request.ChangePriceTTC")</label>
+                        <input type="text" asp-for="Price" value="@Math.Round(Model.Price, 2)" />
+                    </div>
+                }
+                                *@
+                                <div class="fees-list inputs">
+                                    <label>@fees </label>
+                                    <span>
+                                        : @String.Join(", ", Model.Fees.Select(f => f.Label + " : " + f.Percent + "%"))
+                                    </span>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="buttons">
+                            @if (Model.IsVendor)
+                            {
+                                if (Model.Status == (int)QuotationStatus.CustomerSend)
+                                {
+                                    <input type="submit" id="request-quotation-button" formaction="/quotation/VendorResponse" class="button-1 quotation-next-step-button" value="@T("Quotation.Request.Send")" name="request-quotation-button" />
+                                }
+                            }
+                            else
+                            {
+                                if (Model.Status == (int)QuotationStatus.VendorSend)
+                                {
+                                    <input type="submit" id="request-quotation-button-accept" formaction="/quotation/CustomerAccept" class="button-1 quotation-next-step-button" value="@T("Quote.Accept")" name="request-quotation-button" />
+                                    <input type="submit" id="request-quotation-button-refuse" formaction="/quotation/CustomerRefuse" class="button-1 quotation-next-step-button" value="@T("Quote.Refuse")" name="request-quotation-button2" />
+                                }
+                            }
+
+                        </div>
+                    </form>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script asp-location="Footer">
+    $(document).ready(function () {
+
+        $("#product_enteredQuantity_@Model.ProductId").on("change", function () {
+
+            QuantityChanged(this.value);
+        });
+
+
+         function QuantityChanged(quantity) {
+        var data = {productId: @Model.ProductId,quantity: quantity};
+        $.ajax({
+            url: "/quotation/CalculatePriceForQuotation",
+            data: data,
+            success: function (response) {
+                $('#totalPriceHT').html(" : " + response.TotalPriceHT);
+                $('#totalPriceTTC').html(" : " + response.TotalPriceTTC);
+            }
+        });
+        }
+    });
+
+    </script>

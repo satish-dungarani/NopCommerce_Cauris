@@ -1,0 +1,98 @@
+﻿@model Nop.Plugin.Widgets.CustomerDocuments.Models.CustomerDocumentsModel
+@using Nop.Plugin.Widgets.CustomerDocuments.Domain
+@using Nop.Core.Domain.Media
+@using Nop.Services.Media
+@inject IDownloadService downloadService
+@if (Model.Documents.Where(p => p.DocumentType == (int)CustomerDocumentType.Identity).ToList().Count > 0)
+{
+    Download download = null;
+        <div id="content">
+            <ul class="qq-upload-list-selector qq-upload-list" aria-live="polite" aria-relevant="additions removals">
+                @foreach (var item in Model.Documents.Where(p=>p.DocumentType == (int)CustomerDocumentType.Identity))
+                {
+                    download = downloadService.GetDownloadById(item.DownloadId);
+                    var downloadGuid = download.DownloadGuid;
+                    var urlDownload = "/Download/GetFileUpload?downloadId=" + download.DownloadGuid + "";
+                    <li class="qq-file-id-1" qq-file-id=@item.Id.ToString()>
+
+                        <span class="qq-upload-file-selector qq-upload-file qq-editable" title=@item.FileName>@item.FileName</span>
+                        <a href=@urlDownload>
+                            <button type="button" class="qq-btn qq-upload-cancel-selector qq-upload-retry">
+                                <i class="fa fa-eye" href=""></i> View
+                            </button>
+                        </a>
+                        <button type="button" class="qq-btn qq-upload-delete-selector qq-upload-delete" onclick="DeleteDocument(@item.Id)"><i class="fa fa-cut"></i> Delete</button>
+                        <span role="status" class="qq-upload-status-text-selector qq-upload-status-text"></span>
+                    </li>
+                }
+            </ul>
+
+        </div>
+
+    }
+else
+    {
+        <div id="nocontent">
+            <span>there is no document available</span>
+        </div>
+    }
+    <div id="result">
+
+    </div>
+    <script asp-location="Footer">
+
+    function DeleteDocument(id) {
+
+        ConfirmDialog(" are you sure Delete this Document ?");
+            function ConfirmDialog(message) {
+                $('<div></div>').appendTo('body')
+                    .html('<div><h6>' + message + '?</h6></div>')
+                    .dialog({
+                        modal: true,
+                        title: 'Delete message',
+                        zIndex: 10000,
+                        autoOpen: true,
+                        width: 'auto',
+                        resizable: false,
+                        buttons: {
+                                Yes: function () {
+                                var postData = {documentId :id};
+                                addAntiForgeryToken(postData);
+                                 $.ajax({
+                                cache: false,
+                                type: "POST",
+                                url: "@Url.Action("DeleteDocument", "CustomerDocuments")",
+                                data: postData,
+                                dataType: "json",
+                                     success: function (result) {
+                                         if (result.Count > 0) {
+                                             $("#partial").html(result.html);
+
+                                         }
+                                         else {
+
+                                             $("#partial").html("there is no document available");
+
+                                         }
+                                },
+                                error: function (jqXHR, textStatus, errorThrown) {
+
+                                }
+                            });
+                             $(this).dialog("close");
+                            },
+                            No: function () {
+
+
+                                $(this).dialog("close");
+                            }
+                        },
+                        close: function (event, ui) {
+                            $(this).remove();
+                        }
+                    });
+            };
+
+        }
+
+    </script>

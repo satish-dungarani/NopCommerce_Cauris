@@ -1,0 +1,53 @@
+﻿@model NotificationSearchModel
+@{
+    Layout = "_ColumnsTwo";
+
+}
+<form asp-controller="Quotation" asp-action="NotificationList" method="post">
+    <div class="content-header clearfix">
+        <h1 class="pull-left">
+            @T("Custom.Code.Notification")
+        </h1>
+    </div>
+    <div class="content">
+        <div class="form-horizontal">
+            <div class="panel-group">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        @{
+                            var gridModel = new DataTablesModel
+                            {
+                                Name = "customers-grid",
+                                UrlRead = new DataUrl("NotificationList", "Quotation", null),
+                                Length = Model.PageSize,
+                                LengthMenu = Model.AvailablePageSizes
+                            };
+
+                            gridModel.ColumnCollection.Add(new ColumnProperty(nameof(NotificationModel.Description))
+                            {
+                                Title = T("Custom.Code.Notification.Description").Text
+                            });
+
+                            gridModel.ColumnCollection.Add(new ColumnProperty(nameof(NotificationModel.Id))
+                            {
+                                Title = T("Custom.Code.Notification.Button.Read").Text,
+                                Width = "80",
+                                Render = new RenderCustom("renderColumnReadNotification")
+
+                            });
+                        }
+                        @await Html.PartialAsync("_Table", gridModel)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<script>
+    function renderColumnReadNotification(data, type, row, meta) {
+        
+        return '<a href="Quotation/ReadNotification?id=' + row.EntityId + '&name=' + row.EntityName + '" class="btn btn-default">Read <i class="fa fa-eye"></i></a>';
+    }
+    
+</script>
+

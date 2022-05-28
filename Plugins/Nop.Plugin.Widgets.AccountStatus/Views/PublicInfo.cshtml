@@ -1,0 +1,13 @@
+﻿@model Nop.Plugin.Widgets.AccountStatus.Models.AccountStatusModel
+@{
+    Layout = "";
+    Html.AddCssFileParts("~/Plugins/Widgets.AccountStatus/Content/AccountStatus/AccountStatus.css");
+}
+
+<ul id="progress">
+    <li class="title">Account Status:</li>
+    <li class="@Model.UploadIdentityDocumens.ToLower()">Identity Documents</li>
+    <li class="@Model.UploadCompagnyDocuments.ToLower()">Company Documents</li>
+    <li class="@Model.ValidateDocuments.ToLower()">Cauris Validation</li>
+    <li class="@Model.ChoiceSubscriptionPlan.ToLower()">Subscriptuon Plan</li>
+    </ul>

@@ -1,0 +1,128 @@
+﻿@model AccountActivationModel
+@{
+    Layout = "_ColumnsOne";
+
+    //title
+    Html.AddTitleParts(T("PageTitle.AccountActivation").Text);
+    //page class
+    Html.AppendPageCssClassParts("html-account-activation-page");
+}
+<div class="page account-activation-page">
+    <div class="page-title">
+        <h1>@T("Account.AccountActivation")</h1>
+    </div>
+    <div class="page-body">
+        <div class="result">
+            @Model.Result
+        </div>
+    </div>
+    @if (!Model.Activated)
+    {
+        <form asp-route="activation" asp-route-returnurl="@Context.Request.Query["ReturnUrl"]" method="post" autocomplete="off">
+            <div asp-validation-summary="ModelOnly" class="message-error"></div>
+            <div class="fieldset">
+                <div class="title">
+                    <strong>@T("Account.YourPassword")</strong>
+                </div>
+                <div class="form-fields">
+                    <div class="inputs">
+                        <input asp-for="Email" type="hidden" />
+                        <input asp-for="Token" type="hidden" />
+                        <input asp-for="Guid" type="hidden" />
+                    </div>
+                    <div class="inputs">
+                        <label asp-for="Password" asp-postfix=":"></label>
+                        <input asp-for="Password" />
+                        <nop-required />
+                        <span asp-validation-for="Password"></span>
+                    </div>
+                    <div class="inputs">
+                        <label asp-for="ConfirmPassword" asp-postfix=":"></label>
+                        <input asp-for="ConfirmPassword" />
+                        <nop-required />
+                        <span asp-validation-for="ConfirmPassword"></span>
+                    </div>
+                    @if (Model.DisplayCaptcha)
+                    {
+                        <nop-captcha />
+                    }
+
+                </div>
+            </div>
+            @if (Model.CompanyEnabled)
+            {
+                <div class="fieldset">
+                    <div class="title">
+                        <strong>@T("Account.CompanyDetails")</strong>
+                    </div>
+                    <div class="form-fields">
+                        @if (Model.CompanyEnabled)
+                        {
+                            <div class="inputs">
+                                <label asp-for="Company" asp-postfix=":"></label>
+                                <input asp-for="Company" />
+                                @if (Model.CompanyRequired)
+                                {
+                                    <nop-required />
+                                }
+                                <span asp-validation-for="Company"></span>
+                            </div>
+                        }
+
+                    </div>
+                </div>
+            }
+            @if (Model.CountryEnabled)
+            {
+                <div class="fieldset">
+                    <div class="title">
+                        <strong>@T("Account.YourAddress")</strong>
+                    </div>
+                    <div class="form-fields">
+                        @if (Model.CountryEnabled)
+                        {
+                            <div class="inputs">
+                                <label asp-for="CountryId" asp-postfix=":"></label>
+                                <select asp-for="CountryId" asp-items="Model.AvailableCountries"
+                                        data-trigger="country-select"
+                                        data-url="@(Url.RouteUrl("GetStatesByCountryId"))"
+                                        data-loading="#states-loading-progress"></select>
+                                @if (Model.CountryRequired)
+                                {
+                                    <nop-required />
+                                }
+                                <span asp-validation-for="CountryId"></span>
+                            </div>
+                        }
+
+                    </div>
+                </div>
+            }
+            @if (Model.PhoneEnabled)
+            {
+                <div class="fieldset">
+                    <div class="title">
+                        <strong>@T("Account.YourContactInformation")</strong>
+                    </div>
+                    <div class="form-fields">
+                        @if (Model.PhoneEnabled)
+                        {
+                            <div class="inputs">
+                                <label asp-for="Phone" asp-postfix=":"></label>
+                                <input asp-for="Phone" />
+                                @if (Model.PhoneRequired)
+                                {
+                                    <nop-required />
+                                }
+                                <span asp-validation-for="Phone"></span>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+            <div class="buttons">
+                <input type="submit" id="register-button" class="button-1 register-next-step-button" value="@T("Activate")" name="register-button" />
+            </div>
+        </form>
+    }
+</div>

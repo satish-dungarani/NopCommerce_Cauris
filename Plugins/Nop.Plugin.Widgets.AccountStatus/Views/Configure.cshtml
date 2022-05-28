@@ -1,0 +1,9 @@
+﻿@model Nop.Plugin.Widgets.AccountStatus.Models.ConfigurationModel
+
+@{
+    Layout = "_ConfigurePlugin";
+}
+@await Component.InvokeAsync("StoreScopeConfiguration")
+<form asp-controller="WidgetsAccountStatus" asp-action="Configure" method="post">
+    
+</form>

@@ -1,0 +1,11 @@
+{
+  "Group": "Widgets",
+  "FriendlyName": "CustomerDocuments",
+  "SystemName": "Widgets.CustomerDocuments",
+  "Version": "1.0",
+  "SupportedVersions": [ "4.30" ],
+  "Author": "bahri hafedh",
+  "DisplayOrder": 1,
+  "FileName": "Nop.Plugin.Widgets.CustomerDocuments.dll",
+  "Description": "This plugin allows you to manage account identity and Compagny verifications  documents"
+}

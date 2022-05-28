@@ -1,0 +1,31 @@
+﻿@model IEnumerable<Nop.Web.Models.Chat.ConversationModel>
+@{
+    Layout = "_ColumnsTwo";
+
+    //title
+    Html.AddTitleParts(T("PageTitle.Account").Text);
+    //page class
+    Html.AppendPageCssClassParts("html-account-page");
+}
+@section left
+{
+    @await Component.InvokeAsync("CustomerNavigation", new { selectedTabId = CustomerNavigationEnum.ChatConversations })
+}
+<div class="block block-chat-conversation">
+
+    <div class="page-title">
+        <h1>@T("Conversations")</h1>
+    </div>
+    <div class="listboxs">
+        <ul class="list">
+
+            @foreach (var item in Model)
+            {
+                <li class="">
+                    <a href="#!" onclick="StartChat(@item.PartnerId, true)">@(item.PartnerName)</a>
+                </li>
+            }
+
+        </ul>
+    </div>
+</div>

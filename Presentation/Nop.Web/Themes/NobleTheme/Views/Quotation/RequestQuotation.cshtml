@@ -1,0 +1,112 @@
+﻿@model QuotationModel
+
+
+<div class="page quotation-add-page">
+
+    <div class="page-body">
+        @if (!string.IsNullOrEmpty(Model.Result))
+        {
+            <div class="quotation-result-page">
+                <div class="result">
+                    @Model.Result
+                </div>
+            </div>
+        }
+
+        @if (!Model.AlreadyExist)
+        {
+            <form asp-route="Create" method="post" autocomplete="off">
+                <div style="text-align:center">
+                    <h1>@T("Quotation.Request.New")</h1>
+                </div>
+                <div asp-validation-summary="ModelOnly" class="message-error"></div>
+                <div class="fieldset">
+                    <div class="form-fields">
+                        <div class="inputs">
+                            <input asp-for="ProductId" type="hidden" />
+                            <input asp-for="VendorId" type="hidden" />
+                            <input asp-for="CustomerVendorId" type="hidden" />
+
+                        </div>
+                        <div class="inputs">
+                            <label for="Quantity">@T("Quotation.Request.Quantity")</label>
+                            @if (Model.AllowedQuantities.Count > 0)
+                            {
+                                <select asp-for="Quantity" asp-items="Model.AllowedQuantities" id="product_enteredQuantity_@Model.ProductId" class="qty-dropdown" aria-label=@T("Products.Qty.AriaLabel")></select>
+                                <script asp-location="Footer">
+                                    $(document).ready(function () {
+                                        $("#product_enteredQuantity_@Model.ProductId").on("change", function () {
+                                            QuantityChanged($('#product_enteredQuantity_@Model.ProductId').find(":selected").text());
+                                        });
+                                    });
+                                </script>
+                            }
+                            else
+                            {
+                                <input asp-for="Quantity" id="product_enteredQuantity_@Model.ProductId" type="number" min="1" />
+                                <script asp-location="Footer">
+                                    $(document).ready(function () {
+                                        $("#product_enteredQuantity_@Model.ProductId").on("change", function () {
+                                            QuantityChanged($('#product_enteredQuantity_@Model.ProductId').val());
+                                        });
+                                    });
+                                </script>
+                            }
+                        </div>
+                        <div class="inputs">
+                            <label for="LeadTime">@T("LeadTime")</label>
+                            <input asp-for="LeadTime" class="delivery-dates" />
+                            <nop-required />
+                        </div>
+                        <div class="inputs">
+                            <label asp-for="CountryId" asp-postfix=":">@T("Quotation.Request.Country")</label>
+                            <select asp-for="CountryId" asp-items="Model.AvailableCountries"></select>
+                            <nop-required />
+                            <span asp-validation-for="CountryId"></span>
+                        </div>
+                        <div class="inputs">
+                            <label asp-for="Specification" asp-postfix=":"></label>
+                            <textarea asp-for="Specification" class="description"></textarea>
+                        </div>
+                        <div class="inputs">
+                            <label for="UnityPrice">@T("Quotation.Request.UnitPrice")</label>
+                            <span asp-for="UnityPrice" class="unit-price">: @Math.Round(Model.UnityPrice, 2)</span>
+                        </div>
+                        <div class="inputs">
+                            <label for="PriceHT italic">@T("Quotation.Request.PriceHT")</label>
+                            <span asp-for="Price" id="totalPriceHT" class="price">: @Math.Round(Model.UnityPrice, 2)</span>
+                        </div>
+                        @{ string fees = Model.Fees.Any() ? "*" : "";}
+                        <div class="inputs">
+                            <label for="PriceTTC">@T("Quotation.Request.PriceTTC") @fees</label>
+                            <span asp-for="Price" id="totalPriceTTC" class="price">: @Math.Round(Model.Price, 2)</span>
+                        </div>
+                        <div class="fees-list inputs">
+                            <label>@fees </label>
+                            <span>
+                                : @String.Join(", ", Model.Fees.Select(f => f.Label + " : " + f.Percent + "%"))
+                            </span>
+                            
+                        </div>
+                    </div>
+                </div>
+                <div class="buttons">
+                    <input type="submit" id="request-quotation-button" class="button-1 quotation-next-step-button" value="@T("Quotation.Request.Send")" name="request-quotation-button" />
+                </div>
+            </form>
+        }
+    </div>
+</div>
+<script>
+    function QuantityChanged(quantity) {
+        var data = {productId: @Model.ProductId,quantity: quantity};
+        $.ajax({
+            url: "/quotation/CalculatePriceForQuotation",
+            data: data,
+            success: function (response) {
+                $('#totalPriceHT').html(" : " + response.TotalPriceHT);
+                $('#totalPriceTTC').html(" : " + response.TotalPriceTTC);
+            }
+        });
+    }
+</script>

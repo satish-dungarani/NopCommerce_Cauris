@@ -1,0 +1,133 @@
+﻿@model QuotationSearchModel
+
+@using System.Globalization;
+@using Nop.Core.Domain.Media
+
+@inject MediaSettings _mediaSettings
+
+@{
+    Layout = "_ColumnsTwo";
+    //page title
+    ViewBag.PageTitle = Model.Received ? T("Quotations.List.Received").Text : T("Quotations.List.Sended").Text;
+
+}
+@section left
+    {
+    @await Component.InvokeAsync("CustomerNavigation", new { selectedTabId = Model.Received ? CustomerNavigationEnum.ReceivedQuotes : CustomerNavigationEnum.SendedQuotes })
+}
+<link href="~/lib/bootstrap/css/bootstrap.css" rel="stylesheet" />
+<form asp-controller="Customer" asp-action="@(Model.Received ? "ListReceived" : "ListSended")">
+</form>
+<input asp-for="Received" type="hidden" />
+<div class="content-header clearfix">
+    <h1 class="pull-left">
+        @if (Model.Received)
+        {
+            @T("Quotation.Received")
+        }
+        else
+        {
+            @T("Quotation.Sended")
+        }
+    </h1>
+</div>
+
+<div class="content">
+    <div class="form-horizontal">
+        <div class="panel-group">
+            <div class="panel panel-default panel-search">
+                <div class="panel-body">
+
+                    <div class="search-body">
+                        <div class="row">
+                            @*<div class="col-md-4">
+                                <nop-label asp-for="Keyword" />
+                            </div>*@
+                            <div class="col-md-6">
+                                <nop-editor asp-for="Keyword" />
+                            </div>
+                            <div class="col-md-2">
+                                <button type="button" id="search-quotations" class="btn btn-primary btn-search">
+                                    <i class="fa fa-search"></i>
+                                    @T("Admin.Common.Search")
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    @{
+                        var gridModel = new DataTablesModel
+                        {
+                            Name = "customers-grid",
+                            UrlRead = new DataUrl(Model.Received ? "ListReceived" : "ListSended", "Quotation", null),
+                            SearchButtonId = "search-quotations",
+                            Length = Model.PageSize,
+                            LengthMenu = Model.AvailablePageSizes,
+                            Filters = new List<FilterParameter>
+                                                 {
+                                    new FilterParameter(nameof(Model.Keyword)),
+                                }
+                        };
+
+                        if (Model.Received)
+                        {
+                            gridModel.ColumnCollection.Add(new ColumnProperty(nameof(QuotationViewModel.CustomerFullName))
+                            {
+                                Title = T("Quotation.Request.Customer").Text
+                            });
+                        }
+
+                        gridModel.ColumnCollection.Add(new ColumnProperty(nameof(QuotationViewModel.ProductName))
+                        {
+                            Title = T("Quotation.Request.Product").Text
+                        });
+
+
+                        gridModel.ColumnCollection.Add(new ColumnProperty(nameof(QuotationViewModel.Status))
+                        {
+                            Title = T("Quotation.Request.Status").Text
+                        });
+                        gridModel.ColumnCollection.Add(new ColumnProperty(nameof(QuotationViewModel.Quantity))
+                        {
+                            Title = T("Quotation.Request.Quantity").Text
+                        });
+                        gridModel.ColumnCollection.Add(new ColumnProperty(nameof(QuotationViewModel.UnityPrice))
+                        {
+                            Title = T("Quotation.Request.PriceHT").Text
+                        });
+                        gridModel.ColumnCollection.Add(new ColumnProperty(nameof(QuotationViewModel.Price))
+                        {
+                            Title = T("Quotation.Request.PriceTTC").Text
+                        });
+                        gridModel.ColumnCollection.Add(new ColumnProperty(nameof(QuotationViewModel.LeadTime))
+                        {
+                            Title = T("Quotation.Request.LeadTime").Text
+                        });
+
+                        gridModel.ColumnCollection.Add(new ColumnProperty(nameof(QuotationViewModel.QuotationId))
+                        {
+                            Title = T("").Text,
+                            Width = "80",
+                            ClassName = NopColumnClassDefaults.Button,
+                            Render = new RenderButtonEdit(new DataUrl("Edit")),
+
+                        });
+                    }
+                    @await Html.PartialAsync("_Table", gridModel)
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        $('#Keyword').keyup(function (e) {
+            $("#search-quotations").click();
+            e.preventDefault();
+            return false;
+        });
+    });
+</script>

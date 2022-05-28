@@ -1,0 +1,6 @@
+﻿{
+  "DataConnectionString": "Data Source=DESKTOP-AQUVP9C\\SQLEXPRESS;Initial Catalog=CORUS430;Integrated Security=False;Persist Security Info=False;User ID=sa;Password=pass@word1",
+  //"DataConnectionString": "Data Source=cauris430.mssql.somee.com;Initial Catalog=cauris430;Integrated Security=False;Persist Security Info=False;User ID=satish_dungarani_SQLLogin_1;Password=gw7nvfyoet",
+  "DataProvider": "sqlserver",
+  "RawDataSettings": {}
+}

@@ -1,0 +1,7 @@
+﻿@model QuotationModel
+
+<div class="request-quotation">
+    @*<a value="@T("Products.Quotation.Request")" class="button-2 " href="/quotation/RequestQuotation/@Model.Id">@(T("Products.Quotation.Request").Text)</a>*@
+    <input type="button" value="@T("Products.Quotation.Request")" class="button-2 request-quotation-button" onclick="setLocation('@Url.RouteUrl("RequestQuotation", new { productId = Model.Id })')"/>
+</div>
+

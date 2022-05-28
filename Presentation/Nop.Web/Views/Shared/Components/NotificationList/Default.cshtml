@@ -1,0 +1,20 @@
+﻿@model List<NotificationModel>
+
+<li id="notification-list" class="notification">
+    <div class="notification-item">
+        <div class="content-header clearfix">
+            <h1 class="pull-left">
+                @T("Custom.Code.Notification")
+            </h1>
+        </div>
+        @foreach (var item in Model)
+        {
+            <table>
+                <tr>
+                    <td>@item.Description</td>
+                </tr>
+            </table>
+        }
+
+    </div>
+</li>

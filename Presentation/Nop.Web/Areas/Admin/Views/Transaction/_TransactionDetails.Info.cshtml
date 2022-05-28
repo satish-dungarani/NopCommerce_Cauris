@@ -1,0 +1,373 @@
+﻿@model TransactionModel
+
+<input type="hidden" asp-for="@Model.ProductId" />
+<div class="panel-body">
+    <div class="panel panel-default sub-panel">
+        <div class="panel-body">
+            <div class="form-group">
+                <div class="col-md-3">
+                    <nop-label asp-for="ModeratorIdentity" />
+                </div>
+                <div class="col-md-9">
+                    <div class="form-text-row">@Model.ModeratorIdentity</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-3">
+                    <nop-label asp-for="ContractSignatureDate" />
+                </div>
+                <div class="col-md-9">
+                    <nop-editor asp-for="ContractSignatureDate" asp-required="true" />
+                    <span asp-validation-for="ContractSignatureDate"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-3">
+                    <nop-label asp-for="DownloadLink" />
+                </div>
+                <div class="col-md-9">
+                    @if (Model.DownloadGuid == null || Model.DownloadGuid == Guid.Empty)
+                    {
+                        <h4>There is no file for download</h4>
+                    }
+                    else
+                    {
+                        <a class='btn btn-default margin-t-5' href="@(Url.Action("DownloadFile", "Download", new { downloadGuid = Model.DownloadGuid, area = AreaNames.Admin }))"><i class='fa fa-download'></i>@T("Admin.Download.DownloadTheContactFile")</a>
+                    }
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-3">
+                    <nop-label asp-for="BuyerName" />
+                </div>
+                <div class="col-md-9">
+                    <nop-editor asp-for="BuyerName" asp-required="true" />
+                    <span asp-validation-for="BuyerName"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-3">
+                    <nop-label asp-for="SellerName" />
+                </div>
+                <div class="col-md-9">
+                    <nop-editor asp-for="SellerName" asp-required="true" />
+                    <span asp-validation-for="SellerName"></span>
+                </div>
+            </div>
+
+            @*<div class="form-group">
+                    <div class="col-md-3">
+                        <nop-label asp-for="ProductName" />
+                    </div>
+                    <div class="col-md-9">
+                        <div class="form-text-row">@Model.ProductName</div>
+                    </div>
+                </div>*@
+
+            <div class="form-group">
+                <div class="col-md-3">
+                    <nop-label asp-for="ProductId" />
+                </div>
+                <div class="col-md-9">
+                    <a asp-controller="Product" target="_blank" asp-action="Edit" asp-route-id="@Model.ProductId">@Model.ProductName</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel panel-default sub-panel">
+        <div class="panel-body">
+            <div class="form-group">
+                <div class="col-md-3">
+                    <nop-label asp-for="Quantity" />
+                </div>
+                <div class="col-md-9">
+                    <nop-editor asp-for="Quantity" asp-required="true" />
+                    <span asp-validation-for="Quantity"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-3">
+                    <nop-label asp-for="Price" />
+                </div>
+                <div class="col-md-9">
+                    @*<div class="form-text-row">@Model.Price</div>*@
+                    <nop-editor asp-for="Price" asp-postfix="@Model.PrimaryStoreCurrencyCode" asp-required="true" />
+                    <span asp-validation-for="Price"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-3">
+                    <nop-label asp-for="Tax" />
+                </div>
+                <div class="col-md-9">
+                    <nop-editor asp-for="Tax" asp-required="true" />
+                    <span asp-validation-for="Tax"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-3">
+                    <nop-label asp-for="PaymentTerm" />
+                </div>
+                <div class="col-md-9">
+                    <nop-editor asp-for="PaymentTerm" asp-required="true" />
+                    <span asp-validation-for="PaymentTerm"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-3">
+                    <nop-label asp-for="Inspection" />
+                </div>
+                <div class="col-md-9">
+                    <div class="raw">
+                        <div class="col-md-1">
+                            <div class="radio">
+                                <label>
+                                    @Html.RadioButton("Inspection", true, (Model.Inspection), new { id = "Yes" })
+                                    @T("Corus.Admin.Transaction.Field.Yes")
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-11">
+                            <div class="radio">
+                                <label>
+                                    @Html.RadioButton("Inspection", false, (Model.Inspection == false), new { id = "No" })
+                                    @T("Corus.Admin.Transaction.Field.No")
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-3">
+                    <nop-label asp-for="Insurance" />
+                </div>
+                <div class="col-md-9">
+                    <div class="raw">
+                        <div class="col-md-1">
+                            <div class="radio">
+                                <label>
+                                    @Html.RadioButton("Insurance", true, (Model.Insurance), new { id = "Yes" })
+                                    @T("Corus.Admin.Transaction.Field.Yes")
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-11">
+                            <div class="radio">
+                                <label>
+                                    @Html.RadioButton("Insurance", false, (Model.Insurance == false), new { id = "No" })
+                                    @T("Corus.Admin.Transaction.Field.No")
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-3">
+                    <nop-label asp-for="PartialShipping" />
+                </div>
+                <div class="col-md-9">
+                    <div class="raw">
+                        <div class="col-md-1">
+                            <div class="radio">
+                                <label>
+                                    @Html.RadioButton("PartialShipping", true, (Model.PartialShipping), new { id = "Yes" })
+                                    @T("Corus.Admin.Transaction.Field.Yes")
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-11">
+                            <div class="radio">
+                                <label>
+                                    @Html.RadioButton("PartialShipping", false, (Model.PartialShipping == false), new { id = "No" })
+                                    @T("Corus.Admin.Transaction.Field.No")
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @*  <div class="form-group">
+                    <div class="col-md-3">
+                        <nop-label asp-for="DeliveryTermId" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-select asp-for="DeliveryTermId" asp-items="@(((DeliveryTerm)Model.DeliveryTermId).ToSelectList())" />
+                        <span asp-validation-for="DeliveryTermId"></span>
+                    </div>
+                </div>*@
+            <div class="form-group">
+                <div class="col-md-3">
+                    <nop-label asp-for="DeliveryTermId" />
+                </div>
+                <div class="col-md-9">
+                    <nop-select asp-for="DeliveryTermId" asp-items="Model.AvailableTransactionStatus" />
+                    <span asp-validation-for="DeliveryTermId"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-3">
+                    <nop-label asp-for="LoadingOrigin" />
+                </div>
+                <div class="col-md-9">
+                    <nop-editor asp-for="LoadingOrigin" asp-required="true" />
+                    <span asp-validation-for="LoadingOrigin"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-3">
+                    <nop-label asp-for="Destination" />
+                </div>
+                <div class="col-md-9">
+                    <nop-editor asp-for="Destination" asp-required="true" />
+                    <span asp-validation-for="Destination"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-3">
+                    <nop-label asp-for="LastDateOfShipment" />
+                </div>
+                <div class="col-md-9">
+                    <nop-editor asp-for="LastDateOfShipment" asp-required="true" />
+                    <span asp-validation-for="LastDateOfShipment"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-3">
+                    <nop-label asp-for="DocumentsRequirement" asp-required="true" />
+                </div>
+                <div class="col-md-9">
+                    <nop-textarea asp-for="DocumentsRequirement" asp-required="true" />
+                    <span asp-validation-for="DocumentsRequirement"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-3">
+                    <nop-label asp-for="ModeratorComment" />
+                </div>
+                <div class="col-md-9">
+                    <nop-editor asp-for="ModeratorComment" asp-template="RichEditor" asp-required="true" />
+                    <span asp-validation-for="ModeratorComment"></span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="panel panel-default sub-panel">
+        <div class="panel-body">
+            <div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        <nop-label asp-for="ModeratorLastComment" />
+                    </div>
+
+                    <div class="col-md-9">
+                        @if (String.IsNullOrEmpty(Model.ModeratorLastComment))
+                        {
+                            <h4> There is no Moderator Comment Exist </h4>
+                        }
+                        else
+                        {
+                            <div>@Html.Raw(Model.ModeratorLastComment)</div>
+                        }
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+    @if (Model.TransactionStatusId == (int)TransactionStatus.Waiting_For_Funds_Available)
+    {
+        <div class="panel panel-default sub-panel">
+            <div class="panel-body">
+    <div class="form-group">
+        <div class="col-md-12">
+            <h1 class="pull-left">
+
+                <input type="hidden" asp-for="@Model.Id" />
+                @*<input type="submit" class="btn bg-blue" value="Validate the contract" onclick="return confirm('@T("Corus.Admin.Transaction.Field.ValidateTransactionDetail")')" />*@
+                <button type="button" class="btn bg-olive" data-toggle="modal" data-target="#fundscollected">
+                    @T("Corus.Admin.Transaction.Field.FundsAvailable")
+                </button>
+
+            </h1>
+        </div>
+
+    </div>
+
+            </div>
+        </div>
+
+        //COde for Popup for asking sure
+        <div id="fundscollected" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="fundscollected-window-title">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="fundscollected-title"> Need clarification for transaction (@Model.Id)</h4>
+                    </div>
+                        <div class="modal-body">
+                          
+                                            Funds corresponding this transaction are available
+                                      
+                            </div>
+                      
+                        <div class="modal-footer">
+                            <button type="button" id="fundsavailable" class="btn btn-primary">Funds Available</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+                        <script>
+                    $(document).ready(function() {
+                        $('#fundsavailable').click(function () {
+                            alert("test")
+                             var postData = {
+                                transactionId: '@Model.Id'
+                            };
+                            addAntiForgeryToken(postData);
+                            $.ajax({
+                                cache: false,
+                                type: "POST",
+                                url: "@(Url.Action("TransactionFundsAvailable", "Transaction"))",
+                                data: postData,
+                                success: function (data, textStatus, jqXHR) {
+                                    if (!data.Result) {
+                                        return;
+                                    } else {
+                                        alert("success")
+                                        window.location.reload();
+                                    }
+                                },
+                                error: function (jqXHR, textStatus, errorThrown) {
+                                    $("#addTransactionClarify").click();
+                                },
+                                complete: function (jqXHR, textStatus) {
+                                    $('#addTransactionClarify').attr('disabled', false);
+                                }
+                            });
+                        });
+                    });
+                        </script>
+
+                </div>
+    }
+
+</div>

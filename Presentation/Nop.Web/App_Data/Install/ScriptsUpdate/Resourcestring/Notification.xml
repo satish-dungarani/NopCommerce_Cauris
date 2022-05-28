@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Language Name="English">
+ 
+  <LocaleResource Name="Vendors.ApplyAccount.Submitted">
+    <Value>Your request has been submitted successfully. We'll contact you soon.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Vendors.List">
+    <Value>Vendor List</Value>
+  </LocaleResource>
+  <LocaleResource Name="Vendors.ViewAll">
+    <Value>View all</Value>
+  </LocaleResource>
+  <LocaleResource Name="Wishlist">
+    <Value>Wishlist</Value>
+  </LocaleResource>
+  <LocaleResource Name="Wishlist.AddToCart.Error">
+    <Value>Some product(s) from wishlist could not be moved to the cart for some reasons.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Wishlist.AddToCart.NoAddedItems">
+    <Value>No products selected to add to cart.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Wishlist.CartIsEmpty">
+    <Value>The wishlist is empty!</Value>
+  </LocaleResource>
+  <LocaleResource Name="Wishlist.EmailAFriend">
+    <Value>Email a friend</Value>
+  </LocaleResource>
+  <LocaleResource Name="Wishlist.EmailAFriend.Button">
+    <Value>Send email</Value>
+  </LocaleResource>
+  <LocaleResource Name="Wishlist.EmailAFriend.FriendEmail">
+    <Value>Friend's email</Value>
+  </LocaleResource>
+  <LocaleResource Name="Wishlist.EmailAFriend.FriendEmail.Hint">
+    <Value>Enter friend's email.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Wishlist.EmailAFriend.FriendEmail.Required">
+    <Value>Enter friend's email</Value>
+  </LocaleResource>
+  <LocaleResource Name="Wishlist.EmailAFriend.OnlyRegisteredUsers">
+    <Value>Only registered customers can use email a friend feature</Value>
+  </LocaleResource>
+  <LocaleResource Name="Wishlist.EmailAFriend.PersonalMessage">
+    <Value>Personal message</Value>
+  </LocaleResource>
+  <LocaleResource Name="Wishlist.EmailAFriend.PersonalMessage.Hint">
+    <Value>Enter personal message (optional).</Value>
+  </LocaleResource>
+  <LocaleResource Name="Wishlist.EmailAFriend.SuccessfullySent">
+    <Value>Your message has been sent.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Wishlist.EmailAFriend.Title">
+    <Value>Email your wishlist to a friend</Value>
+  </LocaleResource>
+  <LocaleResource Name="Wishlist.EmailAFriend.YourEmailAddress">
+    <Value>Your email address</Value>
+  </LocaleResource>
+  <LocaleResource Name="Wishlist.EmailAFriend.YourEmailAddress.Hint">
+    <Value>Enter your email address.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Wishlist.EmailAFriend.YourEmailAddress.Required">
+    <Value>Enter your email</Value>
+  </LocaleResource>
+  <LocaleResource Name="Wishlist.HeaderQuantity">
+    <Value>({0})</Value>
+  </LocaleResource>
+  <LocaleResource Name="Wishlist.TaxShipping.ExclTax">
+    <Value><![CDATA[All prices are entered excluding tax. Excluding <a href="{0}">shipping</a>]]></Value>
+  </LocaleResource>
+  <LocaleResource Name="Wishlist.TaxShipping.InclTax">
+    <Value><![CDATA[All prices are entered including tax. Excluding <a href="{0}">shipping</a>]]></Value>
+  </LocaleResource>
+  <LocaleResource Name="Wishlist.UpdateCart">
+    <Value>Update wishlist</Value>
+  </LocaleResource>
+  <LocaleResource Name="Wishlist.WishlistOf">
+    <Value>Wishlist of {0}</Value>
+  </LocaleResource>
+  <LocaleResource Name="Wishlist.YourWishlistURL">
+    <Value>Your wishlist URL for sharing</Value>
+  </LocaleResource>
+  <LocaleResource Name="Custom.Code.Notification">
+    <Value>Notification</Value>
+  </LocaleResource>
+  <LocaleResource Name="Custom.Code.Notification.Description">
+    <Value>Description</Value>
+  </LocaleResource>
+  <LocaleResource Name="Custom.Code.Notification.Button.Read">
+    <Value>Read</Value>
+  </LocaleResource>
+  <LocaleResource Name="Custom.Code.Notification.Count">
+    <Value>({0})</Value>
+  </LocaleResource>
+  <LocaleResource Name="Custom.Code.Notification.Customer.Send.Quotation.Request">
+    <Value>{0} send request to you for quotation</Value>
+  </LocaleResource>
+  <LocaleResource Name="Custom.Code.Notification.Vendor.Send.Quotation.Response">
+    <Value>Vendor send response to you for quotation</Value>
+  </LocaleResource>
+  <LocaleResource Name="Custom.Code.Notification.Customer.Accept.Response">
+    <Value>{0} accept your quotation response</Value>
+  </LocaleResource>
+</Language>

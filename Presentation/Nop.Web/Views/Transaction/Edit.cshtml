@@ -1,0 +1,188 @@
+﻿@using Nop.Web.Models.Transactions
+@using Nop.Core.Domain.Transactions
+@using System;
+@using Nop.Services;
+@model TransactionOverviewModel
+
+@{
+
+    //page title
+    ViewBag.PageTitle = "Edit Transaction";/*Model.IsReceived ? T("Transaction.List.Received").Text : T("Transaction.List.Sent").Text;*/
+
+    Html.AppendCssFileParts(ResourceLocation.Head, "~/lib/bootstrap/css/bootstrap.min.css");
+
+    var transStausList = Enum.GetValues(typeof(TransactionStatus));
+    var crumWidth = (92.00 / transStausList.Length);
+
+}
+
+@*<h3>@Model.ProductName</h3><br />
+    <h3>@Model.CustomerName</h3><br />
+    <h3>@Model.VendorName</h3><br />*@
+
+<style>
+    #crumbs {
+        text-align: center;
+    }
+
+        #crumbs ul {
+            list-style: none;
+            display: inline-table;
+        }
+
+            #crumbs ul li {
+                display: inline;
+            }
+
+                #crumbs ul li a {
+                    display: block;
+                    float: left;
+                    height: 60px;
+                    background: #7777;
+                    text-align: center;
+                    padding: 10px 15px 0 30px;
+                    position: relative;
+                    margin: 5px;
+                    font-size: 11px;
+                    text-decoration: none;
+                    color: #fff;
+                }
+
+                    #crumbs ul li a:after {
+                        content: "";
+                        border-top: 30px solid transparent;
+                        border-bottom: 30px solid transparent;
+                        border-left: 30px solid #7777;
+                        position: absolute;
+                        right: -30px;
+                        top: 0;
+                        z-index: 1;
+                    }
+
+                    #crumbs ul li a:before {
+                        content: "";
+                        border-top: 30px solid transparent;
+                        border-bottom: 30px solid transparent;
+                        border-left: 30px solid #ffffff;
+                        position: absolute;
+                        left: 0;
+                        top: 0;
+                    }
+
+                #crumbs ul li:first-child a {
+                    border-top-left-radius: 10px;
+                    border-bottom-left-radius: 10px;
+                }
+
+                    #crumbs ul li:first-child a:before {
+                        display: none;
+                    }
+
+                #crumbs ul li:last-child a {
+                    padding-right: 40px;
+                    border-top-right-radius: 10px;
+                    border-bottom-right-radius: 10px;
+                }
+
+                    #crumbs ul li:last-child a:after {
+                        display: none;
+                    }
+</style>
+
+<div id="crumbs">
+    <ul>
+
+        @foreach (TransactionStatus item in transStausList)
+        {
+            <li id="@item.ToString()">
+                <a href="#@item" style="width:@crumWidth%; @if ((int)item == Model.TransactionStatusId) {<text>background:green;</text>}">
+                    @item.GetDescription()
+                </a>
+            </li>
+            if ((int)item == Model.TransactionStatusId)
+            {
+                <style>
+                    #crumbs ul #@item.ToString() a:after {
+                        border-left-color: green;
+                    }
+                </style>
+            }
+        }
+    </ul>
+</div>
+
+<form method="post" autocomplete="off" enctype="multipart/form-data">
+    @Html.HiddenFor(x => x.Id)
+    <div class="page-body">
+        <div class="panel-body">
+            <table>
+                <tbody>
+                    <tr>
+                        <td style="font-weight:bold;text-align:end;width:45%">Transaction Number</td>
+                        <td style="font-weight: bold; text-align: center; width: 10%;">:</td>
+                        <td style="width:45%"> @Model.TransactionNumber</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:bold;text-align:end;width:45%">Product</td>
+                        <td style="font-weight: bold; text-align: center; width: 10%;">:</td>
+                        <td style="width:45%"> @Model.ProductName</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:bold;text-align:end;width:45%">Customer</td>
+                        <td style="font-weight: bold; text-align: center; width: 10%;">:</td>
+                        <td style="width:45%"> @Model.CustomerName</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:bold;text-align:end;width:45%">Vendor</td>
+                        <td style="font-weight: bold; text-align: center; width: 10%;">:</td>
+                        <td style="width:45%"> @Model.VendorName</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:bold;text-align:end;width:45%">Quotation Accepted Date</td>
+                        <td style="font-weight: bold; text-align: center; width: 10%;">:</td>
+                        <td style="width:45%"> @Model.CreatedOnUtc.ToString("dd MMM yyyy")</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:bold;text-align:end;width:45%">Amount</td>
+                        <td style="font-weight: bold; text-align: center; width: 10%;">:</td>
+                        <td style="width:45%"> @Model.Amount</td>
+                    </tr>
+                    @*@if (Model.TransactionStatusId == (int)TransactionStatus.Waiting_Upload_Contract)
+                    {*@
+                        <tr>
+                            <td style="font-weight:bold;text-align:end;width:45%">Upload Contract</td>
+                            <td style="font-weight: bold; text-align: center; width: 10%;">:</td>
+                            <td style="width:45%">
+                                @Html.HiddenFor(x => x.CustomerDocumentId)
+                                <input type="file" class="form-control" name="CustomerDocument" id="CustomerDocument" accept=".pdf" />
+                            </td>
+                        </tr>
+                    @*}*@
+
+
+                </tbody>
+                @*@if (Model.TransactionStatusId == (int)TransactionStatus.Waiting_Upload_Contract)
+                {*@
+                    <tfoot style="margin-top:20px;">
+                        <tr>
+                            <td style="text-align: center; padding-top: 20px;" colspan="3">
+                                <input id="btnWaiting_Upload_Contract" onclick="return fun_waiting_upload_contract();" type="submit" class="btn btn-primary" />
+                            </td>
+                        </tr>
+                    </tfoot>
+                @*}*@
+            </table>
+        </div>
+    </div>
+</form>
+
+<script asp-location="Footer">
+    $(document).ready(function () {
+        $('input[type="file"]').on('change', function () {
+        });
+    });
+
+    function fun_waiting_upload_contract(){
+        //$("#CustomerDocument").
+    };
+</script>

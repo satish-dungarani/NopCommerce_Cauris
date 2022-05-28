@@ -1,0 +1,518 @@
+﻿@model QuotationModel
+<style>
+    .col-status{
+        width : 33%;
+        float : left;
+        margin-bottom: 3%;
+    }
+    .rowStatus {
+    margin-left:10%;
+    }
+body{margin-top:20px;}
+
+    .steps {
+        border: 1px solid #e7e7e7;
+        margin-bottom: 3% ;
+    }
+
+.steps-header {
+    padding: .375rem;
+    border-bottom: 1px solid #e7e7e7
+}
+
+.steps-header .progress {
+    height: .25rem
+}
+
+.steps-body {
+    display: table;
+    table-layout: fixed;
+    width: 100%
+}
+
+ .step {
+        display: table-cell;
+        position: relative;
+        padding: 1rem .75rem;
+        -webkit-transition: all 0.25s ease-in-out;
+        transition: all 0.25s ease-in-out;
+        border-right: 1px dashed #dfdfdf;
+        color: rgba(0, 0, 0, 0.65);
+        font-weight: 600;
+        text-align: center;
+        text-decoration: none;
+
+    }
+
+.step:last-child {
+    border-right: 0
+}
+
+.step-indicator {
+    display: block;
+    position: absolute;
+    top: .75rem;
+    left: .75rem;
+    width: 1.5rem;
+    height: 1.5rem;
+    border: 1px solid #e7e7e7;
+    border-radius: 50%;
+    background-color: #fff;
+    font-size: .875rem;
+    line-height: 1.375rem
+}
+
+.has-indicator {
+    padding-right: 1.5rem;
+    padding-left: 2.375rem
+}
+
+.has-indicator .step-indicator {
+    top: 50%;
+    margin-top: -.75rem
+}
+
+.step-icon {
+    display: block;
+    width: 1.5rem;
+    height: 1.5rem;
+    margin: 0 auto;
+    margin-bottom: .75rem;
+    -webkit-transition: all 0.25s ease-in-out;
+    transition: all 0.25s ease-in-out;
+    color: #888
+}
+
+.step:hover {
+    color: rgba(0, 0, 0, 0.9);
+    text-decoration: none
+}
+
+.step:hover .step-indicator {
+    -webkit-transition: all 0.25s ease-in-out;
+    transition: all 0.25s ease-in-out;
+    border-color: transparent;
+    background-color: #f4f4f4
+}
+
+.step:hover .step-icon {
+    color: rgba(0, 0, 0, 0.9)
+}
+
+.step-active,
+.step-active:hover {
+        color: rgba(0, 0, 0, 0.9);
+        pointer-events: none;
+        cursor: default;
+        background-color: #4ab2f1 !important;
+    }
+.step-active .step-indicator,
+.step-active:hover .step-indicator {
+    border-color: transparent;
+    background-color: #5c77fc;
+    color: #fff
+}
+
+.step-active .step-icon,
+.step-active:hover .step-icon {
+    /*color: #5c77fc*/
+}
+
+.step-completed .step-indicator,
+.step-completed:hover .step-indicator {
+    border-color: transparent;
+    background-color: rgba(51, 203, 129, 0.12);
+    color: #33cb81;
+    line-height: 1.25rem
+}
+
+.step-completed .step-indicator .feather,
+.step-completed:hover .step-indicator .feather {
+    width: .875rem;
+    height: .875rem
+}
+    .step-refused .step-indicator,
+    .step-refused:hover .step-indicator {
+        border-color: transparent;
+        background-color: rgba(252,86,44, 0.12);
+        color: #e83131;
+        line-height: 1.25rem
+    }
+
+        .step-refused .step-indicator .feather,
+        .step-refused:hover .step-indicator .feather {
+            width: .875rem;
+            height: .875rem
+        }
+.bg-secondary {
+    background-color: #f7f7f7 !important;
+}
+    .detailsQuote {
+    display : table;
+    margin-top:5%;
+    width:100%;
+    }
+    .detailsQuote .elementDetailsQuote{
+        display: table-cell;
+        width:50%;
+    }
+        .detailsQuote .elementDetailsQuote .value {
+            color: #444;
+        }
+        .stepDisabled{
+            background-color:#dfdfdf !important;
+        }
+    #request-quotation-button-refuse{
+        background-color :#fb4f4f;
+    }
+    #request-quotation-button-accept{
+        background-color : #33cb81 !important;
+    }
+.step-completed .step-indicator,
+.step-completed:hover .step-indicator {
+    border-color: transparent;
+    background-color: rgba(51, 203, 129, 0.12);
+    color: #33cb81;
+    line-height: 1.25rem
+}
+
+.step-completed .step-indicator .feather,
+.step-completed:hover .step-indicator .feather {
+    width: .875rem;
+    height: .875rem
+}
+    .step-refused .step-indicator,
+    .step-refused:hover .step-indicator {
+        border-color: transparent;
+        background-color: rgba(252,86,44, 0.12);
+        color: #e83131;
+        line-height: 1.25rem
+    }
+
+        .step-refused .step-indicator .feather,
+        .step-refused:hover .step-indicator .feather {
+            width: .875rem;
+            height: .875rem
+        }
+
+
+.bg-secondary {
+    background-color: #f7f7f7 !important;
+}
+    .detailsQuote {
+    display : table;
+    margin-top:5%;
+    width:100%;
+    }
+    .detailsQuote .elementDetailsQuote{
+        display: table-cell;
+        width:50%;
+    }
+        .detailsQuote .elementDetailsQuote .value {
+            color: #444;
+        }
+        .stepDisabled{
+            background-color:#dfdfdf !important;
+        }
+    #request-quotation-button-refuse{
+        background-color :#fb4f4f;
+    }
+    #request-quotation-button-accept{
+        background-color : #33cb81 !important;
+    }
+</style>
+
+<div class="page quotation-add-page">
+    <div class="page-body">
+        @if (!string.IsNullOrEmpty(Model.Result))
+        {
+            <div class="quotation-result-page">
+                <div class="result">
+                    @Model.Result
+                </div>
+            </div>
+        }
+        @if (!Model.AlreadyExist)
+        {
+            <div class="container pb-5 mb-sm-4">
+
+                <!-- Progress-->
+                <div class="steps">
+                    <div class="steps-header">
+                        <div class="progress">
+                            <div class="progress-bar" role="progressbar" style="width: 40%" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                    </div>
+                    <div class="steps-body">
+                        @if (Model.IsVendor)
+                        {
+                            <div class="step step-completed">
+                                <span class="step-indicator"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check"><polyline points="20 6 9 17 4 12"></polyline></svg></span><span class="step-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-settings"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg></span>
+                                @T("Quote.Request.Received")
+                            </div>
+                            @if (Model.Status == (int)QuotationStatus.VendorSend)
+                            {
+                                <div class="step step-completed">
+                                    <span class="step-indicator"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check"><polyline points="20 6 9 17 4 12"></polyline></svg></span><span class="step-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-award"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg></span>
+                                    @T("Quote.Response.Sended")
+                                </div>
+                                <div class="step step-active">
+                                    <span class="step-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-circle"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg></span>
+                                    Waiting for customer descision
+                                </div>
+                            }
+                            else if (Model.Status == (int)QuotationStatus.CustomerAccept)
+                            {
+                                <div class="step step-completed">
+                                    <span class="step-indicator"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check"><polyline points="20 6 9 17 4 12"></polyline></svg></span><span class="step-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-award"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg></span>
+                                    @T("Quote.Response.Sended")
+                                </div>
+                                <div class="step step-completed">
+                                    <span class="step-indicator"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check"><polyline points="20 6 9 17 4 12"></polyline></svg></span><span class="step-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-circle"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg></span>
+                                    @T("Quote.Accepted")
+                                </div>
+                            }
+                            else if (Model.Status == (int)QuotationStatus.CustomerRefuse)
+                            {
+                                <div class="step step-completed">
+                                    <span class="step-indicator"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check"><polyline points="20 6 9 17 4 12"></polyline></svg></span><span class="step-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-award"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg></span>
+                                    @T("Quote.Response.Sended")
+                                </div>
+                                <div class="step step-refused">
+                                    <span class="step-indicator"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check"><polyline points="20 6 9 17 4 12"></polyline></svg></span><span class="step-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-circle"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg></span>
+                                    @T("Quote.Refused")
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="step step-active">
+                                    <span class="step-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-award"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg></span>
+                                    Response Quotes
+                                </div>
+                                <div class="step stepDisabled">
+                                    <span class="step-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-circle"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg></span>
+                                    Accepted
+                                </div>
+                            }
+
+
+                        }
+                        else
+                        {
+                            <div class="step step-completed">
+                                <span class="step-indicator"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check"><polyline points="20 6 9 17 4 12"></polyline></svg></span><span class="step-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-settings"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                                </span>@T("Quote.Request.Sended")
+                            </div>
+                            @if (Model.Status == (int)QuotationStatus.VendorSend)
+                            {
+                                <div class="step step-completed">
+                                    <span class="step-indicator"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check"><polyline points="20 6 9 17 4 12"></polyline></svg></span><span class="step-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-award"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg></span>
+                                    @T("Quote.Response.Received")
+                                </div>
+                                <div class="step step-active">
+                                    <span class="step-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-circle"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg></span>
+                                    Waiting for descision
+                                </div>
+                            }
+                            else if (Model.Status == (int)QuotationStatus.CustomerAccept)
+                            {
+                                <div class="step step-completed">
+                                    <span class="step-indicator"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check"><polyline points="20 6 9 17 4 12"></polyline></svg></span><span class="step-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-award"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg></span>
+                                    @T("Quote.Response.Received")
+                                </div>
+                                <div class="step step-completed">
+                                    <span class="step-indicator"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check"><polyline points="20 6 9 17 4 12"></polyline></svg></span><span class="step-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-circle"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg></span>
+                                    @T("Quote.Accepted")
+                                </div>
+                            }
+                            else if (Model.Status == (int)QuotationStatus.CustomerRefuse)
+                            {
+                                <div class="step step-completed">
+                                    <span class="step-indicator"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check"><polyline points="20 6 9 17 4 12"></polyline></svg></span><span class="step-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-award"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg></span>
+                                    @T("Quote.Response.Received")
+                                </div>
+                                <div class="step step-refused">
+                                    <span class="step-indicator"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check"><polyline points="20 6 9 17 4 12"></polyline></svg></span><span class="step-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-circle"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg></span>
+                                    @T("Quote.Refused")
+                                </div>
+                            }
+                            else if (Model.Status == (int)QuotationStatus.ModerationPending)
+                            {
+                                <div class="step step-active">
+                                    <span class="step-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-settings"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg></span>
+                                    @T("Quote.BeingProcessed")
+                                </div>
+                                <div class="step stepDisabled">
+                                    <span class="step-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-award"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg></span>
+                                    @T("Quote.Response.Received")
+                                </div>
+                                <div class="step stepDisabled">
+                                    <span class="step-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-circle"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg></span>
+                                    @T("Quote.Accepted")
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="step step-active">
+                                    <span class="step-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-award"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg></span>
+                                    @T("Quote.WaitingVendorResponse")
+                                </div>
+                                <div class="step stepDisabled">
+                                    <span class="step-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-circle"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg></span>
+                                    @T("Quote.Accepted")
+                                </div>
+                            }
+
+
+                        }
+
+                    </div>
+                </div>
+                <!-- Details-->
+                <div class="detailsQuote">
+                    <div class="row mb-3 elementDetailsQuote">
+                        <div class="col-sm-4 mb-2">
+                            <div class="bg-secondary p-4 text-dark text-center"><span class="font-weight-semibold mr-2">Customer:</span><span class="value">@Model.CustomerFullName</span></div>
+                        </div>
+                        <div class="col-sm-4 mb-2">
+                            <div class="bg-secondary p-4 text-dark text-center"><span class="font-weight-semibold mr-2">Status:</span><span class="value">@Model.StatusText</span></div>
+                        </div>
+                        <div class="col-sm-4 mb-2">
+                            <div class="bg-secondary p-4 text-dark text-center"><span class="font-weight-semibold mr-2">Created date:</span><span class="value">@Model.CreationDate</span></div>
+                        </div>
+                    </div>
+                    <div class="row mb-3 elementDetailsQuote">
+                        <div class="product-essentialq">
+                            <div class="">
+                                <div class="product-name">
+                                    <h1>
+                                       
+                                    </h1>
+                                </div>
+
+                           
+
+                               
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <form method="post" autocomplete="off">
+                <div asp-validation-summary="ModelOnly" class="message-error"></div>
+                <div class="fieldset">
+                    <div class="form-fields">
+                        <div class="inputs">
+                            <input asp-for="ProductId" type="hidden" />
+                            <input asp-for="VendorId" type="hidden" />
+                            <input asp-for="CustomerVendorId" type="hidden" />
+
+                        </div>
+                        <div class="inputs">
+                            <label asp-for="Quantity" asp-postfix=":">@T("Quotation.Request.Quantity")</label>
+                            @if (Model.Status == (int)QuotationStatus.CustomerSend && Model.IsVendor)
+                            {
+                                @if (Model.AllowedQuantities.Count > 0)
+                                {
+                                    <select asp-for="Quantity" asp-items="Model.AllowedQuantities" id="product_enteredQuantity_@Model.ProductId" class="qty-dropdown" aria-label=@T("Products.Qty.AriaLabel")></select>
+                                    <script asp-location="Footer">
+                                    $(document).ready(function () {
+                                        $("#product_enteredQuantity_@Model.ProductId").on("change", function () {
+                                            QuantityChanged($('#product_enteredQuantity_@Model.ProductId').find(":selected").text());
+                                        });
+                                    });
+                                    </script>
+                                }
+                                else
+                                {
+                                    <input asp-for="Quantity" id="product_enteredQuantity_@Model.ProductId" type="number" min="1" />
+                                    <script asp-location="Footer">
+                                    $(document).ready(function () {
+                                        $("#product_enteredQuantity_@Model.ProductId").on("change", function () {
+                                            QuantityChanged($('#product_enteredQuantity_@Model.ProductId').val());
+                                        });
+                                    });
+                                    </script>
+                                }
+                            }
+                            else
+                            {
+                                <span>@Model.Quantity</span>
+                            }
+                        </div>
+                        <div class="inputs">
+                            <label asp-for="LeadTime" asp-postfix=":">@T("Quotation.Request.LeadTime")</label>
+
+                            <span>@Model.LeadTime.ToShortDateString()</span>
+                        </div>
+                        @if (Model.Status == (int)QuotationStatus.CustomerSend && Model.IsVendor)
+                        {
+                            <div class="inputs">
+                                <label asp-for="NewLeadTime" asp-postfix=":">@T("Quotation.Request.NewLeadTime")</label>
+                                <input asp-for="NewLeadTime" value="@Model.LeadTime" class="delivery-dates" />
+                            </div>
+                        }
+                        <div class="inputs">
+                            <label asp-for="CountryId" asp-postfix=":">@T("Quotation.Request.Country")</label>
+
+                            <span style="margin-top:5%">@Model.Country</span>
+                            <input type="hidden" asp-for="CountryId" />
+                            <input type="hidden" asp-for="QuotationId" />
+                        </div>
+                        <div class="inputs">
+                            <label asp-for="Specification" asp-postfix=":"></label>
+                            <span>@Model.Specification</span>
+                        </div>
+                        <div class="inputs">
+                            <label asp-for="UnityPrice" asp-postfix=":">@T("Quotation.Request.UnitPrice")</label>
+                            <span asp-for="UnityPrice" class="unit-price"> @Math.Round(Model.UnityPrice, 2)</span>
+                        </div>
+                        <div class="inputs">
+                            <label asp-for="UnityPrice" class="PriceHT italic" asp-postfix=":">@T("Quotation.Request.PriceHT")</label>
+                            <span asp-for="Price" id="totalPriceHT" class="price"> @Math.Round(Model.UnityPrice, 2)</span>
+                        </div>
+                        @{ string fees = Model.Fees.Any() ? "*" : "";}
+                        <div class="inputs">
+                            <label asp-for="Price" asp-postfix=":">@T("Quotation.Request.PriceTTC") @fees</label>
+                            <span asp-for="Price" id="totalPriceTTC" class="price">@Math.Round(Model.Price, 2)</span>
+                        </div>
+                        @* Vendor can edit TTC price *@
+                        @if (Model.IsVendor && Model.Status == (int)QuotationStatus.CustomerSend)
+                        {
+                            <div class="inputs">
+                                <label asp-for="Price" asp-postfix=":">@T("Quote.Request.ChangePriceTTC")</label>
+                                <input type="text" asp-for="Price" value="@Math.Round(Model.Price, 2)" />
+                            </div>
+                        }
+                        <div class="fees-list inputs">
+                            <label>@fees </label>
+                            <span>
+                                : @String.Join(", ", Model.Fees.Select(f => f.Label + " : " + f.Percent + "%"))
+                            </span>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="buttons">
+                    @if (Model.IsVendor)
+                    {
+                        if (Model.Status == (int)QuotationStatus.CustomerSend)
+                        {
+                            <input type="submit" id="request-quotation-button" formaction="/quotation/VendorResponse" class="button-1 quotation-next-step-button" value="@T("Quotation.Request.Send")" name="request-quotation-button" />
+                        }
+                    }
+                    else
+                    {
+                        if (Model.Status == (int)QuotationStatus.VendorSend)
+                        {
+                            <input type="submit" id="request-quotation-button-accept" formaction="/quotation/CustomerAccept" class="button-1 quotation-next-step-button" value="@T("Quote.Accept")" name="request-quotation-button" />
+                            <input type="submit" id="request-quotation-button-refuse" formaction="/quotation/CustomerRefuse" class="button-1 quotation-next-step-button" value="@T("Quote.Refuse")" name="request-quotation-button2" />
+                        }
+                    }
+
+                </div>
+            </form>
+        }
+    </div>
+</div>

@@ -1,0 +1,14 @@
+﻿@model ProductDetailsModel
+
+@if (Model.IsLoggedUser && Model.ConnectedId != Model.VendorId)
+{
+    <div class="request-quotation">
+        <input type="button" value="@T("Products.CHAT")" class="button-2 request-quotation-button" onclick="StartChat(@Model.CustomerLinkVendor, true)" />
+    </div>
+}
+else
+{
+    <div class="request-quotation">
+        <input type="button" value="@T("Products.CHAT")" class="button-2 request-quotation-button" onclick="setLocation('@Url.RouteUrl("Login")')" />
+    </div>
+}

@@ -1,0 +1,11 @@
+{
+  "Group": "Widgets",
+  "FriendlyName": "Account Status",
+  "SystemName": "Widgets.AccountStatus",
+  "Version": "1.0",
+  "SupportedVersions": [ "4.30" ],
+  "Author": "bahri hafedh",
+  "DisplayOrder": 1,
+  "FileName": "Nop.Plugin.Widgets.AccountStatus.dll",
+  "Description": "This plugin allows you to see account status registration"
+}

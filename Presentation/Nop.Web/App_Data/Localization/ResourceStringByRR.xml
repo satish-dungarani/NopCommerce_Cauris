@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Language Name="English">
+  <LocaleResource Name="Custom.Code.Notification.Seller.Uploaded.Contract">
+    <Value>The seller has been uploaded new contract.</Value>
+  </LocaleResource>
+</Language>

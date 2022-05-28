@@ -1,0 +1,139 @@
+﻿@model Nop.Plugin.Widgets.CustomerDocuments.Models.CustomerDocumentsModel
+@{
+    Layout = "";
+    Html.AddCssFileParts("~/Plugins/Widgets.CustomerDocuments/Content/CustomerDocuments/DocumentsStyle.css");
+    //page class
+    Html.AddCssFileParts("~/lib/fontAwesome/css/font-awesome.css");
+    Html.AddCssFileParts("~/lib/fineuploader/fine-uploader-new.css");
+    Html.AddScriptParts(ResourceLocation.Footer, "~/lib/fineuploader/jquery.fine-uploader.js");
+}
+
+
+<div id="partial1">
+    @await Html.PartialAsync("~/Plugins/Widgets.CustomerDocuments/Views/_CompagnyList.cshtml", Model)
+</div>
+
+<script type="text/template" id="qq-template-manual-trigger1">
+    <div class="qq-uploader-selector qq-uploader" qq-drop-area-text="Drop files here">
+        <div class="qq-total-progress-bar-container-selector qq-total-progress-bar-container">
+            <div role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" class="qq-total-progress-bar-selector qq-progress-bar qq-total-progress-bar"></div>
+        </div>
+        <div class="qq-upload-drop-area-selector qq-upload-drop-area" qq-hide-dropzone>
+            <span class="qq-upload-drop-area-text-selector"></span>
+        </div>
+        <div class="buttons">
+            <div class="qq-upload-button-selector qq-upload-button">
+                <div>Select files</div>
+            </div>
+
+        </div>
+        <span class="qq-drop-processing-selector qq-drop-processing">
+            <span>Processing dropped files...</span>
+            <span class="qq-drop-processing-spinner-selector qq-drop-processing-spinner"></span>
+        </span>
+        <ul class="qq-upload-list-selector qq-upload-list" aria-live="polite" aria-relevant="additions removals">
+            <li>
+                <div class="qq-progress-bar-container-selector">
+                    <div role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" class="qq-progress-bar-selector qq-progress-bar"></div>
+                </div>
+                <span class="qq-upload-spinner-selector qq-upload-spinner"></span>
+                <img class="qq-thumbnail-selector" qq-max-size="100" qq-server-scale>
+                <span class="qq-upload-file-selector qq-upload-file">
+
+                </span>
+                <span class="qq-edit-filename-icon-selector qq-edit-filename-icon" aria-label="Edit filename"></span>
+                <input class="qq-edit-filename-selector qq-edit-filename" tabindex="0" type="text">
+                <span class="qq-upload-size-selector qq-upload-size"></span>
+                <button type="button" class="qq-btn qq-upload-cancel-selector qq-upload-cancel">Cancel</button>
+                <button type="button" class="qq-btn qq-upload-retry-selector qq-upload-retry">Retry</button>
+                <button type="button" class="qq-btn qq-upload-delete-selector qq-upload-delete">Delete</button>
+                <span role="status" class="qq-upload-status-text-selector qq-upload-status-text"></span>
+            </li>
+        </ul>
+
+
+        <dialog class="qq-alert-dialog-selector">
+            <div class="qq-dialog-message-selector"></div>
+            <div class="qq-dialog-buttons">
+                <button type="button" class="qq-cancel-button-selector">Close</button>
+            </div>
+        </dialog>
+
+        <dialog class="qq-confirm-dialog-selector">
+            <div class="qq-dialog-message-selector"></div>
+            <div class="qq-dialog-buttons">
+                <button type="button" class="qq-cancel-button-selector">No</button>
+                <button type="button" class="qq-ok-button-selector">Yes</button>
+            </div>
+        </dialog>
+
+        <dialog class="qq-prompt-dialog-selector">
+            <div class="qq-dialog-message-selector"></div>
+            <input type="text">
+            <div class="qq-dialog-buttons">
+                <button type="button" class="qq-cancel-button-selector">Cancel</button>
+                <button type="button" class="qq-ok-button-selector">Ok</button>
+            </div>
+        </dialog>
+    </div>
+
+</script>
+
+<!-- Fine Uploader DOM Element
+====================================================================== -->
+<div id="fine-uploader-manual-trigger1"></div>
+
+<div class="buttons">
+    <input type="button" id="trigger-upload1" value="@T("Common.Save")" name="save-document-button" class="button-1 save-customer-document-button" />
+</div>
+<!-- Your code to create an instance of Fine Uploader and bind to the DOM/template
+====================================================================== -->
+<script asp-location="Footer">
+        $(document).ready(function () {
+
+            $('#fine-uploader-manual-trigger1').fineUploader({
+                template: 'qq-template-manual-trigger1',
+
+                request: {
+                     endpoint: '@(Url.RouteUrl("UploadFileCustomerDocumentCompany"))',
+                },
+                thumbnails: {
+                    placeholders: {
+                        waitingPath: '/lib/fineuploader/placeholders/waiting-generic.png',
+                        notAvailablePath: '/lib/fineuploader/placeholders/not_available-generic.png'
+                    }
+                },
+                autoUpload: false,
+
+            }).on('complete', function (event, id, fileName, responseJSON) {
+                UpdateDocument();
+                $('#fine-uploader-manual-trigger1').fineUploader('clearStoredFiles');
+            });
+
+            $('#trigger-upload1').click(function () {
+                $('#fine-uploader-manual-trigger1').fineUploader('uploadStoredFiles');
+            });
+
+            function UpdateDocument() {
+               var postData = { };
+                            addAntiForgeryToken(postData);
+
+                            $.ajax({
+                                cache: false,
+                                type: "POST",
+                                url: "@Url.Action("SaveCustomerDocumentCompany", "CustomerDocuments")",
+                                data: postData,
+                                dataType: "json",
+                                success: function (result) {
+                                    $("#partial1").html(result.html);
+                                },
+                                error: function (jqXHR, textStatus, errorThrown) {
+                                    alert('Failed to Save Document');
+                                }
+                            });
+            }
+
+
+        })
+</script>
+

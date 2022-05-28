@@ -1,0 +1,260 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Language Name="English">
+  
+  <LocaleResource Name="Corus.Admin.Transaction.Field.ModeratorIdentity">
+    <Value>Moderator Identity</Value>
+  </LocaleResource>
+  <LocaleResource Name="Corus.Admin.Transaction.Field.ModeratorIdentity.Hint">
+    <Value>Moderator Identity</Value>
+  </LocaleResource>
+  <LocaleResource Name="Corus.Admin.Transaction.Field.ContractSignatureDate">
+    <Value>Contract SignatureDate</Value>
+  </LocaleResource>
+    <LocaleResource Name="Corus.Admin.Transaction.Field.ContractSignatureDate.Hint">
+    <Value>Contract SignatureDate</Value>
+  </LocaleResource>
+   <LocaleResource Name="Corus.Admin.Transaction.Field.BuyerName">
+    <Value>Buyer Name</Value>
+  </LocaleResource>
+   <LocaleResource Name="Corus.Admin.Transaction.Field.BuyerName.Hint">
+    <Value>Buyer Name</Value>
+  </LocaleResource>
+   <LocaleResource Name="Corus.Admin.Transaction.Field.SellerName">
+    <Value>Seller Name</Value>
+  </LocaleResource>
+   <LocaleResource Name="Corus.Admin.Transaction.Field.SellerName.Hint">
+    <Value>Seller Name</Value>
+  </LocaleResource>
+  
+   <LocaleResource Name="Corus.Admin.Transaction.Field.ProductName">
+    <Value>Product Name</Value>
+  </LocaleResource>
+   <LocaleResource Name="Corus.Admin.Transaction.Field.ProductName.Hint">
+    <Value>Product Name</Value>
+  </LocaleResource>
+  
+   <LocaleResource Name="Corus.Admin.Transaction.Field.ProductId.Hint">
+    <Value>Click Here to check Product Page</Value>
+  </LocaleResource>
+   <LocaleResource Name="Corus.Admin.Transaction.Field.ProductId">
+    <Value>Product Name</Value>
+  </LocaleResource>
+  
+   <LocaleResource Name="Corus.Admin.Transaction.Field.Quantity">
+    <Value>Quantity</Value>
+  </LocaleResource>
+  <LocaleResource Name="Corus.Admin.Transaction.Field.Quantity.Hint">
+    <Value>Quantity</Value>
+  </LocaleResource>
+  
+   <LocaleResource Name="Corus.Admin.Transaction.Field.Price">
+    <Value>Price</Value>
+  </LocaleResource>
+   <LocaleResource Name="Corus.Admin.Transaction.Field.Price.Hint">
+    <Value>Price</Value>
+  </LocaleResource>
+  
+  
+   <LocaleResource Name="Corus.Admin.Transaction.Field.Tax">
+    <Value>Tax</Value>
+  </LocaleResource>
+  
+  <LocaleResource Name="Corus.Admin.Transaction.Field.Tax.Hint">
+    <Value>Tax</Value>
+  </LocaleResource>
+  
+  
+   <LocaleResource Name="Corus.Admin.Transaction.Field.PaymentTerm">
+    <Value>Payment Term</Value>
+  </LocaleResource>
+   <LocaleResource Name="Corus.Admin.Transaction.Field.PaymentTerm.Hint">
+    <Value>Payment Term</Value>
+  </LocaleResource>
+
+ <LocaleResource Name="Corus.Admin.Transaction.Field.Inspection">
+    <Value>Inspection</Value>
+  </LocaleResource>
+  <LocaleResource Name="Corus.Admin.Transaction.Field.Inspection.Hint">
+    <Value>Inspection</Value>
+  </LocaleResource>
+  
+   <LocaleResource Name="Corus.Admin.Transaction.Field.Insurance">
+    <Value>Insurance</Value>
+  </LocaleResource>
+  
+   <LocaleResource Name="Corus.Admin.Transaction.Field.Insurance.Hint">
+    <Value>Insurance</Value>
+  </LocaleResource>
+  
+  <LocaleResource Name="Corus.Admin.Transaction.Field.PartialShipping">
+    <Value>Partial Shipping</Value>
+  </LocaleResource>
+   <LocaleResource Name="Corus.Admin.Transaction.Field.PartialShipping.Hint">
+    <Value>Partial Shipping</Value>
+  </LocaleResource>
+  
+  
+   <LocaleResource Name="Corus.Admin.Transaction.Field.DeliveryTermId">
+    <Value>Delivery Term</Value>
+  </LocaleResource>
+  <LocaleResource Name="Corus.Admin.Transaction.Field.DeliveryTermId.Hint">
+    <Value>Select the delivery Term</Value>
+  </LocaleResource>
+  
+  
+  
+  <LocaleResource Name="Corus.Admin.Transaction.Field.LoadingOrigin">
+    <Value>LoadingOrigin</Value>
+  </LocaleResource>
+  
+  <LocaleResource Name="Corus.Admin.Transaction.Field.LoadingOrigin.Hint">
+    <Value>LoadingOrigin</Value>
+  </LocaleResource>
+  
+  
+   <LocaleResource Name="Corus.Admin.Transaction.Field.Destination">
+    <Value>Destination</Value>
+  </LocaleResource>
+   <LocaleResource Name="Corus.Admin.Transaction.Field.Destination.Hint">
+    <Value>Destination</Value>
+  </LocaleResource>
+  
+ <LocaleResource Name="Corus.Admin.Transaction.Field.LastDateOfShipment.Hint">
+    <Value>Last Date Of Shipment</Value>
+  </LocaleResource>
+  
+   <LocaleResource Name="Corus.Admin.Transaction.Field.LastDateOfShipment">
+    <Value>Last Date Of Shipment</Value>
+  </LocaleResource>
+  
+  
+   <LocaleResource Name="Corus.Admin.Transaction.Field.DocumentsRequirement.Hint">
+    <Value>Documents Requirement</Value>
+  </LocaleResource>
+  
+  <LocaleResource Name="Corus.Admin.Transaction.Field.DocumentsRequirement">
+    <Value>Documents Requirement</Value>
+  </LocaleResource>
+   <LocaleResource Name="Admin.Orders.EditTransactionDetails">
+    <Value>Validate Cauris Contract</Value>
+  </LocaleResource>
+  
+ 
+  <LocaleResource Name="Admin.Transaction.BackToList">
+    <Value>back to transaction list</Value>
+  </LocaleResource>
+  
+ <LocaleResource Name="corus.admin.transaction.field.transactionstatus">
+    <Value>Transaction Status</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Transaction.Edit">
+    <Value>Edit Transaction Details</Value>
+  </LocaleResource>
+  
+  <LocaleResource Name="Corus.Admin.Transaction.Field.Yes">
+    <Value>Yes</Value>
+  </LocaleResource>
+ <LocaleResource Name="Corus.Admin.Transaction.Field.No">
+    <Value>No</Value>
+  </LocaleResource>
+  
+  <LocaleResource Name="Corus.Admin.Transaction.Field.DownloadLink">
+    <Value>DownloadLink</Value>
+  </LocaleResource>
+  <LocaleResource Name="Corus.Admin.Transaction.Field.DownloadLink.Hint">
+    <Value>DownloadLink</Value>
+  </LocaleResource>
+   <LocaleResource Name="Corus.Admin.Transaction.Field.ModeratorComment">
+    <Value>Moderator Comment</Value>
+  </LocaleResource>
+ <LocaleResource Name="Corus.Admin.Transaction.Field.ModeratorComment.Hint">
+    <Value>Enter the Moderator Comment</Value>
+  </LocaleResource>
+  
+   <LocaleResource Name="Corus.Admin.Transaction.Field.ModeratorLastComment">
+    <Value>Moderator Last Comment</Value>
+  </LocaleResource>
+ <LocaleResource Name="Corus.Admin.Transaction.Field.ModeratorLastComment.Hint">
+    <Value>It will Display Moderator Last Comment</Value>
+  </LocaleResource>
+  
+  
+  <LocaleResource Name="Corus.Admin.Transaction.Field.ValidateTheContract">
+    <Value>Validate the contract</Value>
+  </LocaleResource>
+  <LocaleResource Name="Corus.Admin.Transaction.Field.AskForClarification">
+    <Value>Ask For Clarification</Value>
+  </LocaleResource>
+  <LocaleResource Name="Corus.Admin.Transaction.Field.ValidateTransactionDetail">
+    <Value>Please confirm, you validate contract of this transaction?</Value>
+  </LocaleResource>
+  
+  <LocaleResource Name="Corus.Admin.Transaction.AskClaraficationDetail">
+    <Value>Add Clarification Comment </Value>
+  </LocaleResource>
+  
+   <LocaleResource Name="Corus.Admin.Transaction.Field.ContractSignatureDate.Required">
+    <Value>Contract Signature Date required</Value>
+  </LocaleResource>
+ <LocaleResource Name="Corus.Admin.Transaction.Field.BuyerName.Required">
+    <Value>Buyer Name required</Value>
+  </LocaleResource>
+   <LocaleResource Name="Corus.Admin.Transaction.Field.SellerName.Required">
+    <Value>Seller Name required</Value>
+  </LocaleResource>
+  <LocaleResource Name="Corus.Admin.Transaction.Field.Quantity.Required">
+    <Value>Quantity required</Value>
+  </LocaleResource>
+  <LocaleResource Name="Corus.Admin.Transaction.Field.Price.Required">
+    <Value>Price required</Value>
+  </LocaleResource>
+  
+   <LocaleResource Name="Corus.Admin.Transaction.Field.Tax.Required">
+    <Value>Tax required</Value>
+  </LocaleResource>
+  
+   <LocaleResource Name="Corus.Admin.Transaction.Field.PaymentTerm.Required">
+    <Value>Payment Term required</Value>
+  </LocaleResource>
+   <LocaleResource Name="Corus.Admin.Transaction.Field.LoadingOrigin.Required">
+    <Value>Loading Origin required</Value>
+  </LocaleResource>
+   <LocaleResource Name="Corus.Admin.Transaction.Field.Destination.Required">
+    <Value>Destination required</Value>
+  </LocaleResource>
+   <LocaleResource Name="Corus.Admin.Transaction.Field.LastDateOfShipment.Required">
+    <Value>Last Date Of Shipment required</Value>
+  </LocaleResource>
+   <LocaleResource Name="Corus.Admin.Transaction.Field.DocumentsRequirement.Required">
+    <Value>Documents Requirement required</Value>
+  </LocaleResource>
+  <LocaleResource Name="Corus.Admin.Transaction.Field.ModeratorComment.Required">
+    <Value>Moderator Comment required</Value>
+  </LocaleResource>
+  
+  <LocaleResource Name="Custom.Code.Notification">
+    <Value>Notification</Value>
+  </LocaleResource>
+  <LocaleResource Name="Custom.Code.Notification.Description">
+    <Value>Description</Value>
+  </LocaleResource>
+  <LocaleResource Name="Custom.Code.Notification.Button.Read">
+    <Value>Read</Value>
+  </LocaleResource>
+  <LocaleResource Name="Custom.Code.Notification.Count">
+    <Value>({0})</Value>
+  </LocaleResource>
+  <LocaleResource Name="Custom.Code.Notification.Customer.Send.Quotation.Request">
+    <Value>{0} send request to you for quotation</Value>
+  </LocaleResource>
+  <LocaleResource Name="Custom.Code.Notification.Vendor.Send.Quotation.Response">
+    <Value>Vendor send response to you for quotation</Value>
+  </LocaleResource>
+  <LocaleResource Name="Custom.Code.Notification.Customer.Accept.Response">
+    <Value>{0} accept your quotation response</Value>
+  </LocaleResource>
+  <LocaleResource Name="Transactions.Received">
+    <Value>Transactions Received</Value>
+  </LocaleResource>
+  
+</Language>

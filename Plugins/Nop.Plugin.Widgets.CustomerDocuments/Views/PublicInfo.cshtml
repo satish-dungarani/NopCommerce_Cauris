@@ -1,0 +1,18 @@
+﻿@model Nop.Plugin.Widgets.CustomerDocuments.Models.CustomerDocumentsModel
+@{
+    Layout = "";
+    Html.AddCssFileParts("~/Plugins/Widgets.CustomerDocuments/Content/CustomerDocuments/DocumentsStyle.css");
+    //page class
+    Html.AddCssFileParts("~/lib/fontAwesome/css/font-awesome.css");
+    Html.AddCssFileParts("~/lib/fineuploader/fine-uploader-new.css");
+    Html.AddScriptParts(ResourceLocation.Footer, "~/lib/fineuploader/jquery.fine-uploader.js");
+}
+
+
+    <div>
+        @await Html.PartialAsync("~/Plugins/Widgets.CustomerDocuments/Views/_IdentityDocuments.cshtml", Model)
+    </div>
+
+    <div>
+        @await Html.PartialAsync("~/Plugins/Widgets.CustomerDocuments/Views/_CompagnyDocuments.cshtml", Model)
+    </div>

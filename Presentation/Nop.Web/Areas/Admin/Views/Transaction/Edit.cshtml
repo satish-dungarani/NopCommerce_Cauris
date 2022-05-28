@@ -1,0 +1,127 @@
+@model TransactionModel
+
+@{
+    //page title
+    ViewBag.PageTitle = T("Admin.Transaction.Edit").Text;
+    //active menu item (system name)
+    Html.SetActiveMenuItemSystemName("Cauris");
+}
+
+@*@{
+        const string hideInfoBlockAttributeName = "OrderPage.HideInfoBlock";
+        var hideInfoBlock = genericAttributeService.GetAttribute<bool>(workContext.CurrentCustomer, hideInfoBlockAttributeName);
+    }*@
+
+<form asp-controller="Transaction" asp-action="Edit" method="post" id="order-form">
+    <div class="content-header clearfix">
+        <h1 class="pull-left">
+            @T("Admin.Orders.EditTransactionDetails")
+            <small>
+                <i class="fa fa-arrow-circle-left"></i>
+                <a asp-action="List">@T("Admin.Transaction.BackToList")</a>
+            </small>
+        </h1>
+        <div class="pull-right">
+        </div>
+    </div>
+
+    <div asp-validation-summary="All"></div>
+
+    <div class="content">
+        <div class="form-horizontal">
+            @await Html.PartialAsync("_TransactionDetails.Info", Model)
+            @if (Model.TransactionStatusId != (int)TransactionStatus.Waiting_For_Funds_Available)
+            {
+                <div class="content-header clearfix">
+                    <h1 class="pull-left">
+                        <input type="submit" class="btn bg-blue" value="Validate the contract" onclick="return confirm('@T("Corus.Admin.Transaction.Field.ValidateTransactionDetail")')" />
+                    </h1>
+                    <div class="pull-right">
+                        <button type="button" class="btn bg-olive" data-toggle="modal" data-target="#importxml-window">
+                            @T("Corus.Admin.Transaction.Field.AskForClarification")
+                        </button>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+
+</form>
+<nop-delete-confirmation asp-model-id="@Model.Id" asp-button-id="order-delete" />
+
+@*import resources form*@
+<div id="importxml-window" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="importxml-window-title">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="importxml-window-title"> Need clarification for transaction (@Model.Id)</h4>
+            </div>
+                <div class="form-horizontal">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <div class="col-md-2">
+                                <div class="label-wrapper">
+                                    <label class="control-label">
+                                        @T("Corus.Admin.Transaction.AskClaraficationDetail")
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-10">
+                                <textarea type="text" id="clarificationTxt" name="clarificationTxt" class="form-control" ></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input id="addTransactionClarify" class="btn btn-primary" value="Send Detail" />
+                    </div>
+                </div>
+                <script>
+                    $(document).ready(function() {
+                             $('#addTransactionClarify').click(function () {
+                                 var transactionComment = $("#clarificationTxt").val();
+                                 var transactionId = $("#@Html.IdFor(model => model.Id)").val();
+
+                           if (transactionComment =='') {
+                               alert("Please enter the transaction Comment")
+                                $("#addProductPictureAlert").click();
+                                return;
+                            }
+
+                                 $('#addTransactionClarify').attr('disabled', true);
+
+                            var postData = {
+                                transactionComment: transactionComment,
+                                transactionId: '@Model.Id'
+                            };
+                            addAntiForgeryToken(postData);
+
+                            $.ajax({
+                                cache: false,
+                                type: "POST",
+                                url: "@(Url.Action("TransactionClarify", "Transaction"))",
+                                data: postData,
+                                success: function (data, textStatus, jqXHR) {
+                                    if (!data.Result) {
+                                        return;
+                                    } else {
+                                        alert("success")
+                                        window.location.reload();
+                                    }
+                                    
+                                },
+                                error: function (jqXHR, textStatus, errorThrown) {
+                                    $("#addTransactionClarify").click();
+                                },
+                                complete: function (jqXHR, textStatus) {
+                                    $('#addTransactionClarify').attr('disabled', false);
+                                }
+                            });
+                        });
+                    });
+                </script>
+
+        </div>
+    </div>
+</div>

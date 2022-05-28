@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Language Name="English">
+  <LocaleResource Name="Admin.Cauris.Transaction.Menu">
+    <Value>Transaction Menu</Value>
+  </LocaleResource>
+   
+     <LocaleResource Name="Admin.Cauris.Transaction.SubMenu">
+    <Value>Transaction</Value>
+  </LocaleResource>
+  
+    <LocaleResource Name="Admin.Cauris.Transaction">
+    <Value>Transaction</Value>
+  </LocaleResource>
+   
+    <LocaleResource Name="Admin.Cauris.List.TransactionStatus">
+    <Value>Transaction statuses</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Cauris.List.TransactionStatus.Hint">
+    <Value>Search by a specific Transaction status e.g. Complete.</Value>
+  </LocaleResource>
+  
+  <LocaleResource Name="Admin.Cauris.List.PaymentStatus">
+    <Value>Payment statuses</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Cauris.List.PaymentStatus.Hint">
+    <Value>Search by a specific payment status e.g. Paid.</Value>
+  </LocaleResource>
+ 
+  <LocaleResource Name="Admin.Cauris.List.CustomerEmail">
+    <Value>Customer email address</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Cauris.List.PaymentStatus.Hint">
+    <Value>Filter by customer email address.</Value>
+  </LocaleResource>
+  
+   <LocaleResource Name="Cauris.Transaction.Document.BackToList">
+    <Value>Back to List</Value>
+  </LocaleResource>
+</Language>
